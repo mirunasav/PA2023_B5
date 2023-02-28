@@ -60,29 +60,71 @@ public class Bonus {
             System.out.println("Matricea la puterea " + (k + 1) + " arata astfel: ");
             printMatrix(result);
         }
+        System.out.println();
     }
 
-    public static boolean validateGeneratedNumber( int number,int callingNumber,Map<Integer, List<Integer>> adjacencyLists, List<Integer> adjacencyList, int vertexDegree) {
-     //verific daca -> nodul ala e deja invecinat cu callingNumber;
+    public static boolean validateGeneratedNumber(int number, int callingNumber, Map<Integer, List<Integer>> adjacencyLists, List<Integer> adjacencyList, int vertexDegree) {
+        //verific daca -> nodul ala e deja invecinat cu callingNumber;
         //          -> nodul ala are numar maxim de vecini deja
         //          -> nodul generat e acelasi cu callingNumber
-       if(adjacencyList.contains(number))
-           return false;
-       if(number == callingNumber)
-           return false;
-       if(adjacencyLists.containsKey(number) && adjacencyLists.get(number).size()== vertexDegree)
-           return false;
-       return true; //contine : return false; altfel true
+        if (adjacencyList.contains(number))
+            return false;
+        if (number == callingNumber)
+            return false;
+        if (adjacencyLists.containsKey(number) && adjacencyLists.get(number).size() == vertexDegree)
+            return false;
+        return true; //contine : return false; altfel true
     }
 
-    public static int generateNumber(int n) {
-        int maxValue = n;
+    public static int generateNumber(int maxValue) {
         int minValue = 1;
 
         return (int) (Math.random() * (maxValue - minValue)) + minValue;
     }
 
-    public static int[][] createAdjacencyMatrixOfRegularGraph(int numberOfVertices, int vertexDegree) {
+    public static int[][] createAdjacencyMatrixOfRefgularGraphDeterministApproach(int numberOfVertices, int vertexDegree) {
+        //PROBLEMA: nici varianta asta nu genereaza mereu, tot tb sa am un element de randomness (?) pt ca matricele
+        //grafurilor regulate nu a o forma generala
+
+        //in loc sa generez random numere, ca in varianta nedeterminista de mai jos, pentru fiecare nod i parcurg pe rand nodurile de la 1 la n
+        //si vad daca le pot adauga in lista de adiacenta a lui i
+        int[][] matrixOfRegularGraph = new int[numberOfVertices + 1][numberOfVertices + 1];
+
+        for (int[] row : matrixOfRegularGraph)
+            Arrays.fill(row, 0);
+
+        Map<Integer, List<Integer>> adjacencyLists = new HashMap<>();
+        //creez listele de adiacenta pentru fiecare nod, ca sa nu ma mai chinui dupa sa vad daca nodul se afla in map sau nu
+        for (int i = 1; i <= numberOfVertices; i++) {
+            List<Integer> neighboursList = new ArrayList<>();
+            adjacencyLists.put(i, neighboursList);
+        }
+
+        for (int i = 1; i <= numberOfVertices; i++) {
+            if (adjacencyLists.get(i).size() < vertexDegree)//daca mai pot adauga noduri in lista de adiacenta a lui i
+            {
+                int remainingSlots = vertexDegree - adjacencyLists.get(i).size(); //cate noduri mai pot adauga
+                for (int j = numberOfVertices; j >= 1; j--) {
+                    if (remainingSlots > 0)
+                        //iau nodurile in ordine si vad daca sunt in lista de adiacenta deja sau nu
+                        if (j != i && !adjacencyLists.get(i).contains(j) && adjacencyLists.get(j).size() < vertexDegree) {
+                            adjacencyLists.get(i).add(j); //adaug nodul in ambele liste
+                            adjacencyLists.get(j).add(i);
+                            matrixOfRegularGraph[i][j] = 1;//modific matricea
+                            matrixOfRegularGraph[j][i] = 1;
+                            remainingSlots--;//scad numarul de noduri pe care le mai pot adauga
+                        }
+                }
+            }
+        }
+        return matrixOfRegularGraph;
+    }
+
+    public static int[][] createAdjacencyMatrixOfRegularGraphNonDeterministApproach(int numberOfVertices, int vertexDegree) {
+        /// PROBLEMA: algoritmul e nedeterminist, si dureaza extrem de mult sa ruleze; ca idee cred ca e corect
+        /// dar nu e eficient deloc
+
+
         //as putea sa creez random niste matrici si sa vad daca au eigenvalue = 1, pana cand gasesc una buna
         //nu prea vreau sa calculez eigenvalue asa incat o sa fac altfel
         //generez matrici random si verific urmatoarea proprietate: pe fiecare rand, am vertexDegree valori de 1
@@ -93,7 +135,7 @@ public class Bonus {
         //2.b pot sa fac o lista cu numere  ce reprezinta varfurile cu care se invecineaza nodul meu si am grija sa nu am numere din lista aia
         //3. generez numere: completez casuta respectiva
 
-        int[][] matrixOfRegularGraph = new int[numberOfVertices+1][numberOfVertices+1];
+        int[][] matrixOfRegularGraph = new int[numberOfVertices + 1][numberOfVertices + 1];
 
         for (int[] row : matrixOfRegularGraph)
             Arrays.fill(row, 0);
@@ -115,7 +157,7 @@ public class Bonus {
             }
             while (remainingSlots > 0) {
                 int number = generateNumber(numberOfVertices);
-                if (validateGeneratedNumber(number,i,adjacencyLists, adjacencyLists.get(i),vertexDegree)) {
+                if (validateGeneratedNumber(number, i, adjacencyLists, adjacencyLists.get(i), vertexDegree)) {
                     //daca numarul e validat il adaug in lista de adiacenta a nodului i
                     //pe urma modific matricea si pun 1 pe pozitiile necesare
                     adjacencyLists.get(i).add(number);
@@ -140,11 +182,79 @@ public class Bonus {
         return matrixOfRegularGraph;
     }
 
+    public static ArrayList<Integer> generateRandomPermutation(int n) {
+        ArrayList<Integer> vectorOfRemainingNumbers = new ArrayList<>();
+        ArrayList<Integer> permutation = new ArrayList<>();
+
+        for (int i = 1; i <= n; i++)
+            vectorOfRemainingNumbers.add(i);
+
+        while (vectorOfRemainingNumbers.size() > 0) {
+            int index = (int) (Math.random() * vectorOfRemainingNumbers.size());//generez un index random
+            int number = vectorOfRemainingNumbers.get(index);
+            permutation.add(number);
+            vectorOfRemainingNumbers.set(index, vectorOfRemainingNumbers.get(vectorOfRemainingNumbers.size() - 1));
+            //pun pe indexul ala ultimul numar, pe urma sterg ultima pozitie din vector
+            vectorOfRemainingNumbers.remove(vectorOfRemainingNumbers.size() - 1);
+        }
+        return permutation;
+    }
+
+    public static boolean validateMatrix(int[][] matrix, int vertexDegree, int numberOfVertices) {
+        //verific daca toate nodurile au gradul vertexDegree
+        for (int i = 1; i <= numberOfVertices; i++) {
+            int degree = 0;
+            for (int j = 1; j <= numberOfVertices; j++)
+                degree += matrix[i][j];
+            if (degree != vertexDegree)
+                return false;
+
+        }
+        return true;
+    }
+
+    public static int[][] createAdjacencyMatrixOfRegularGraph(int numberOfVertices, int vertexDegree) {
+        //o sa fac sa mi genereze o permutare random , nu mai iau acel j din al doilea for ca fiind mereu de la n la 1 / de la 1 la n
+        System.out.println("O matrice pentru graful regulat cu " + numberOfVertices +" noduri si gradul " + vertexDegree +" este: ");
+        int[][] matrixOfRegularGraph = new int[numberOfVertices + 1][numberOfVertices + 1];
+        do {
+            for (int[] row : matrixOfRegularGraph)
+                Arrays.fill(row, 0);
+
+            Map<Integer, List<Integer>> adjacencyLists = new HashMap<>();
+            //creez listele de adiacenta pentru fiecare nod, ca sa nu ma mai chinui dupa sa vad daca nodul se afla in map sau nu
+            for (int i = 1; i <= numberOfVertices; i++) {
+                List<Integer> neighboursList = new ArrayList<>();
+                adjacencyLists.put(i, neighboursList);
+            }
+
+            for (int i = 1; i <= numberOfVertices; i++) {
+                if (adjacencyLists.get(i).size() < vertexDegree)//daca mai pot adauga noduri in lista de adiacenta a lui i
+                {
+                    int remainingSlots = vertexDegree - adjacencyLists.get(i).size(); //cate noduri mai pot adauga
+                    ArrayList<Integer> permutation = generateRandomPermutation(numberOfVertices);
+                    for (Integer j : permutation) {
+                        if (remainingSlots > 0)
+                            //iau nodurile in ordine si vad daca sunt in lista de adiacenta deja sau nu
+                            if (j != i && !adjacencyLists.get(i).contains(j) && adjacencyLists.get(j).size() < vertexDegree) {
+                                adjacencyLists.get(i).add(j); //adaug nodul in ambele liste
+                                adjacencyLists.get(j).add(i);
+                                matrixOfRegularGraph[i][j] = 1;//modific matricea
+                                matrixOfRegularGraph[j][i] = 1;
+                                remainingSlots--;//scad numarul de noduri pe care le mai pot adauga
+                            }
+                    }
+                }
+            }
+        }
+        while (!validateMatrix(matrixOfRegularGraph, vertexDegree, numberOfVertices));
+        return matrixOfRegularGraph;
+    }
+
     public static void main(String[] args) {
         n = Integer.parseInt(args[0]);
-       // createAdjacencyMatrix();
-        // powerMatrix(adjacencyMatrix);
-        printMatrix(createAdjacencyMatrixOfRegularGraph(6,3));
-
+        createAdjacencyMatrix();
+        powerMatrix(adjacencyMatrix);
+        printMatrix(createAdjacencyMatrixOfRegularGraph(6, 2));
     }
 }
