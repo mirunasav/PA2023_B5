@@ -1,6 +1,9 @@
+//Savin Miruna, A5
 package bonus;
 
 import java.util.*;
+
+import static java.lang.System.exit;
 
 public class Bonus {
     public static Integer n;
@@ -215,6 +218,12 @@ public class Bonus {
 
     public static int[][] createAdjacencyMatrixOfRegularGraph(int numberOfVertices, int vertexDegree) {
         //o sa fac sa mi genereze o permutare random , nu mai iau acel j din al doilea for ca fiind mereu de la n la 1 / de la 1 la n
+        if(!(numberOfVertices >= vertexDegree + 1 && (numberOfVertices*vertexDegree)%2 == 0 )) //adica nu poate exista un graf regulat cu conditiile date
+        {
+            System.out.println("nu exista un graf regulat cu  "+ numberOfVertices + " noduri si gradul " + vertexDegree);
+            exit(2);
+        }
+
         System.out.println("O matrice pentru graful regulat cu " + numberOfVertices +" noduri si gradul " + vertexDegree +" este: ");
         int[][] matrixOfRegularGraph = new int[numberOfVertices + 1][numberOfVertices + 1];
         do {
@@ -255,6 +264,6 @@ public class Bonus {
         n = Integer.parseInt(args[0]);
         createAdjacencyMatrix();
         powerMatrix(adjacencyMatrix);
-        printMatrix(createAdjacencyMatrixOfRegularGraph(6, 2));
+        printMatrix(createAdjacencyMatrixOfRegularGraph(6, 3));
     }
 }
