@@ -1,4 +1,5 @@
 //Savin Miruna
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -13,33 +14,36 @@ public class Road {
     public Road(RoadType type, Float length, Integer speedLimit, Location[] startEndLocations) {
         //mai intai verific daca length e ok, si doar in acest caz continui
         //altfel nu creez strada si arunc exceptie
-            this.type = type;
-            this.length = length;
-            this.speedLimit = speedLimit;
-            this.startEndLocations = startEndLocations;
+        this.type = type;
+        this.length = length;
+        this.speedLimit = speedLimit;
+        this.startEndLocations = startEndLocations;
 
-            if(!this.checkLengthValidity(startEndLocations))
-            {
-                System.out.println("Eroare! Lungimea strazii dintre " +
-                        startEndLocations[0].getName() + " si " + startEndLocations[1].getName()
-                        + " este prea mica!\n");
-                exit(1);
-            }
+        try {
+            this.checkLengthValidity(startEndLocations);
+        } catch (InvalidArgumentsException e) {
+            System.out.println(e.toString());
+            exit(1);
+        }
+
 
     }
 
-    private boolean checkLengthValidity(Location [] startEndLocations)
-    {
+    private void checkLengthValidity(Location[] startEndLocations) throws InvalidArgumentsException {
         double minimumLength;
         int firstX = startEndLocations[0].getCoordinates()[0];
         int secondX = startEndLocations[1].getCoordinates()[0];
         int firstY = startEndLocations[0].getCoordinates()[1];
         int secondY = startEndLocations[1].getCoordinates()[1];
 
-        minimumLength = Math.sqrt(Math.pow(firstX-secondX,2) + Math.pow(firstY-secondY,2));
+        minimumLength = Math.sqrt(Math.pow(firstX - secondX, 2) + Math.pow(firstY - secondY, 2));
 
-        return !(this.length.doubleValue() < minimumLength);
+        if (this.length < minimumLength)
+            throw new InvalidArgumentsException("Eroare! Lungimea strazii dintre " +
+                    startEndLocations[0].getName() + " si " + startEndLocations[1].getName()
+                    + " este prea mica!\n");
     }
+
     public Location[] getStartEndLocations() {
         return startEndLocations;
     }
@@ -48,8 +52,7 @@ public class Road {
         this.startEndLocations = startEndLocations;
     }
 
-    private Location [] startEndLocations;
-
+    private Location[] startEndLocations;
 
     public RoadType getType() {
         return type;

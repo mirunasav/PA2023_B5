@@ -264,6 +264,6 @@ public class Bonus {
         n = Integer.parseInt(args[0]);
         createAdjacencyMatrix();
         powerMatrix(adjacencyMatrix);
-        printMatrix(createAdjacencyMatrixOfRegularGraph(6, 3));
+        printMatrix(createAdjacencyMatrixOfRegularGraph(5, 3));
     }
 }

@@ -33,6 +33,7 @@ public class Problem {
         this.firstLocation = firstLocation;
         this.secondLocation = secondLocation;
 
+        //aici in loc sa fac verificate si sout, ar fi tb sa arunc o exceptie
         if(!this.checkArgumentsValidity(locationsArray,roadsArray,firstLocation,secondLocation))
         {
             System.out.println("Argumentele problemei nu sunt valide!");

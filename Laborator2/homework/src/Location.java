@@ -32,7 +32,6 @@ public abstract class Location {
     public Integer[] getCoordinates() {
         return coordinates;
     }
-
     public void setCoordinates(Integer[] coordinates) {
         this.coordinates = coordinates;
     }

@@ -1,4 +1,3 @@
-//Savin Miruna A5
 import java.util.*;
 
 import static java.lang.System.exit;
@@ -11,6 +10,46 @@ public class Problem {
     Location secondLocation;//destinatie
     //key : o locatie ; value : o lista de adiacenta
     Map<Location, ArrayList<Location> > locationsGraph;
+
+    public Location[] getLocationsArray() {
+        return locationsArray;
+    }
+
+    public void setLocationsArray(Location[] locationsArray) {
+        this.locationsArray = locationsArray;
+    }
+
+    public Road[] getRoadsArray() {
+        return roadsArray;
+    }
+
+    public void setRoadsArray(Road[] roadsArray) {
+        this.roadsArray = roadsArray;
+    }
+
+    public Location getFirstLocation() {
+        return firstLocation;
+    }
+
+    public void setFirstLocation(Location firstLocation) {
+        this.firstLocation = firstLocation;
+    }
+
+    public Location getSecondLocation() {
+        return secondLocation;
+    }
+
+    public void setSecondLocation(Location secondLocation) {
+        this.secondLocation = secondLocation;
+    }
+
+    public Map<Location, ArrayList<Location>> getLocationsGraph() {
+        return locationsGraph;
+    }
+
+    public void setLocationsGraph(Map<Location, ArrayList<Location>> locationsGraph) {
+        this.locationsGraph = locationsGraph;
+    }
 
     private boolean checkArgumentsValidity (Location [] locationsArray, Road [] roadsArray, Location firstLocation, Location secondLocation)
     {
@@ -97,6 +136,8 @@ public class Problem {
         }
         this.createLocationGraph();
     }
+
+
 
     private void createLocationGraph ()
     {
