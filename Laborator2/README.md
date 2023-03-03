@@ -6,5 +6,12 @@ In Homework : Am modelat locatiile sub forma unui graf si am creat liste de adia
 Am facut un BFS din nodul sursa al instantei problemei, si am marcat nodurile
 ca vizitate sau nu. Daca la final nodul destinatie era vizitat, inseamna ca problema are solutie.
 
-In Bonus:Folosesc algoritmul lui Dijkstra in doua feluri pentru a calcula
-shortest/fastest path de la sursa la destinatie.
+In Bonus:
+- Folosesc algoritmul lui Dijkstra in doua feluri pentru a calcula
+shortest/fastest path de la sursa la destinatie : o data iau in considerare distanta,
+a doua data iau in considerare timpul de parcurgere al unui traseu
+
+- Generez instante random ale problemei, verific sa fie valide, si apoi testez algoritmul pe aceste instante
+- To do: sa afisez efectiv traseul nu doar rezultatul, sa calculez runtime ul si memoria folosita
+
+
