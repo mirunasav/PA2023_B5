@@ -1,3 +1,4 @@
+
 //Savin Miruna A5
 public class City extends Location{
     private int population;
