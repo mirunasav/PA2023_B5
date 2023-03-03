@@ -1,12 +1,27 @@
 public class Bonus {
 
     public static void runRandomProblem() {
-        Problem randomProblem = Utilities.generateProblemInstance(200, 100);
+        long begin = System.nanoTime();
+
+        System.out.println("La inceput, avem " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " memorie disponibila");
+        Problem randomProblem = Utilities.generateProblemInstance(1500, 1000);
+
         System.out.println("Vom calcula drumul cel mai scurt de la "
                 + randomProblem.firstLocation +
                 " pana la " + randomProblem.secondLocation);
+
         Solution solution = new Solution(randomProblem);
         System.out.println(solution.createSolution(Utilities.SolutionType.SHORTEST) + " km");
+
+        long end = System.nanoTime();
+        long timeInNanoseconds = end - begin;
+        System.out.println("Elapsed time in nanoseconds : " + timeInNanoseconds);
+
+        double timeInSeconds = (double) timeInNanoseconds / 1_000_000_000.0;
+        System.out.println("Elapsed time in seconds : " + timeInSeconds);
+        System.out.println("La final, avem " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " memorie disponibila");
     }
 
     public static void main(String[] args) {
@@ -27,6 +42,7 @@ public class Bonus {
         } catch (InvalidArgumentsException exception) {
             System.out.println(exception.toString());
         }
+
         runRandomProblem();
     }
 }

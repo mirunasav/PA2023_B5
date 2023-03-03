@@ -30,7 +30,6 @@ public class Utilities {
             //daca problema nu e valida, mai incerc sa generez alta pana cand gasesc una valida
            return generateProblemInstance(numberOfRoads, numberOfLocations);
         }
-
     }
 
     /**

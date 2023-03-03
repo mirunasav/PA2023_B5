@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.lang.System.exit;
@@ -84,7 +85,8 @@ public class Solution {
 
     /**
      * facem Dijkstra dar luam in considerare limitele de viteza
-     * adica o sa contorizam timpii (length / speedLimit)
+     * adica o sa contorizam timpii (length / speedLimit).
+     * O sa fac un "vector" parent[](un map de fapt) pe care il voi folosi pentru a putea reconstitui cel mai scurt traseu;
      *
      * @return locatiile ce fac parte din cea mai rapida ruta
      */
@@ -104,12 +106,16 @@ public class Solution {
          */
         Map<Location, Boolean> shortestPathTree = new HashMap<>();
 
-        //initializam toate distantele cu "infinit", si toate nodurile ca nevizitate
-        for (Location location : this.instanceOfProblem.locationsArray)
+        Map <Location, Location> parents = new LinkedHashMap<>();//ca sa fie ordonate
+        //initializam toate distantele cu "infinit", si toate nodurile ca nevizitate si ca neavand parinti
+        for (Location location : this.instanceOfProblem.locationsArray) {
             distancesFromSourceToLocations.put(location, Float.MAX_VALUE);
-        for (Location location : this.instanceOfProblem.locationsArray)
             shortestPathTree.put(location, false);
+            parents.put(location, null);
+        }
+
         distancesFromSourceToLocations.replace(source, 0f); //distanta de la sursa la ea insasi e 0
+
 
         //gasim shortest path fata de toate nodurile
         for (Map.Entry<Location, Float> entry : distancesFromSourceToLocations.entrySet()) {
@@ -136,6 +142,7 @@ public class Solution {
                             distancesFromSourceToLocations.replace(adjacentLocation.getLocation(),
                                     distancesFromSourceToLocations.get(minimumDistanceLocation)
                                             + adjacentLocation.getPairOfLengthAndSpeedLimit().getLength());
+                            parents.replace(adjacentLocation.getLocation(),minimumDistanceLocation); //modificam parintele
 
                         }
                     } else //iau in considerare timpul
@@ -149,14 +156,26 @@ public class Solution {
                                     distancesFromSourceToLocations.get(minimumDistanceLocation)
                                             + adjacentLocation.getPairOfLengthAndSpeedLimit().getLength()
                                             / adjacentLocation.getPairOfLengthAndSpeedLimit().getSpeedLimit());
+                            parents.replace(adjacentLocation.getLocation(),minimumDistanceLocation);
                         }
                     }
                 }
             }
-
         }
+        if(this.instanceOfProblem.locationsArray.length <= 100)
+            printPath(destination, parents);
+
+
         return distancesFromSourceToLocations.get(instanceOfProblem.secondLocation);
 
+    }
+
+    private static void printPath (Location source, Map <Location, Location> parents)
+    {
+        if(source == null)
+            return;
+        printPath(parents.get(source), parents);
+        System.out.print(source.getName() + " , ");
     }
 
 }
