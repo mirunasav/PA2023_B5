@@ -5,5 +5,8 @@ public interface Node {
     //I can ommit writing the public modifiers since all abstract, default & static methods
     //of an interface are implicitly public
     String getName ();
+    Integer getNodeImportance();
+
+    void printConnections();
 
 }

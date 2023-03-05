@@ -1,13 +1,19 @@
 package compulsory;
 
-public class Company implements Comparable<Node>, Node{
+import java.util.LinkedList;
+import java.util.List;
+
+public class Company implements Comparable<Node>, Node {
 
     private String name;
-    private int numberOfEmployees;
+    private String country;
+    private int numberOfEmployees = 0;
 
-    public Company(String name, int numberOfEmployees) {
+    private List<Person> employees = new LinkedList<>();
+
+    public Company(String name, String country) {
         this.name = name;
-        this.numberOfEmployees = numberOfEmployees;
+        this.country = country;
     }
 
     /**
@@ -25,6 +31,20 @@ public class Company implements Comparable<Node>, Node{
         return this.name;
     }
 
+    @Override
+    public Integer getNodeImportance() {
+        return this.getNumberOfEmployees();
+    }
+
+    @Override
+    public void printConnections() {
+        System.out.println( this.getName() +" are " + this.getNodeImportance() + " conexiuni");
+        System.out.println("Compania "+ this.getName() + " are angajatii: ");
+        for(Person person : employees)
+            System.out.print(person.getName() + "   ");
+        System.out.println();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -37,11 +57,29 @@ public class Company implements Comparable<Node>, Node{
         this.numberOfEmployees = numberOfEmployees;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public List<Person> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Person> employees) {
+        this.employees = employees;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
                 "name='" + name + '\'' +
+                ", country='" + country + '\'' +
                 ", numberOfEmployees=" + numberOfEmployees +
+                ", employees=" + employees +
                 '}';
     }
 }
