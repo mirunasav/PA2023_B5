@@ -1,19 +1,43 @@
 public class Bonus {
 
-    public static void runRandomProblem() {
+    /**
+     * @param typeOfSolution alegem daca vrem sa calculam cea mai scurta / rapida solutie a problemei;
+     *                       Functia genereaza o instanta random a problemei, pe urma o rezolva in functie de tipul de solutie cerut
+     */
+    public static void runRandomProblem(Utilities.SolutionType typeOfSolution) {
+        //marcam inceputul momentului din care incepem sa cronometram durata rularii
         long begin = System.nanoTime();
+
+        StringBuilder typeOfRoute = new StringBuilder();
+        switch (typeOfSolution){
+            case FASTEST:
+                typeOfRoute.append("rapid");
+                break;
+            case SHORTEST:
+                typeOfRoute.append("scurt");
+        }
 
         System.out.println("La inceput, avem " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
                 + " memorie disponibila");
         Problem randomProblem = Utilities.generateProblemInstance(1500, 1000);
 
-        System.out.println("Vom calcula drumul cel mai scurt de la "
+
+        System.out.println("Vom calcula drumul cel mai " + typeOfRoute + " de la "
                 + randomProblem.firstLocation +
                 " pana la " + randomProblem.secondLocation);
 
         Solution solution = new Solution(randomProblem);
-        System.out.println(solution.createSolution(Utilities.SolutionType.SHORTEST) + " km");
 
+        switch (typeOfSolution)
+        {
+            case FASTEST:
+                System.out.println(solution.createSolution(typeOfSolution) + " ore");
+                break;
+            case SHORTEST:
+                System.out.println(solution.createSolution(typeOfSolution) + " km");
+        }
+
+        //sfarsitul cronometrarii
         long end = System.nanoTime();
         long timeInNanoseconds = end - begin;
         System.out.println("Elapsed time in nanoseconds : " + timeInNanoseconds);
@@ -43,6 +67,6 @@ public class Bonus {
             System.out.println(exception.toString());
         }
 
-        runRandomProblem();
+        runRandomProblem(Utilities.SolutionType.FASTEST);
     }
 }
