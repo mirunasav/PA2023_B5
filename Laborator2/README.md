@@ -12,6 +12,5 @@ shortest/fastest path de la sursa la destinatie : o data iau in considerare dist
 a doua data iau in considerare timpul de parcurgere al unui traseu
 
 - Generez instante random ale problemei, verific sa fie valide, si apoi testez algoritmul pe aceste instante
-- To do: sa afisez efectiv traseul nu doar rezultatul, sa calculez runtime ul si memoria folosita
 
 
