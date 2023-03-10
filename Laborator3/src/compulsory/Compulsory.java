@@ -19,10 +19,10 @@ public class Compulsory {
 
         Person andreiStan = new Person("Andrei Stan", 5, "10-06-1990");
         Person mariusPop = new Person("Marius Pop", 7, "09-05-1998");
-        Person catalinCatalin= new Person("Catalin Catalin", 8, "12-10-1995");
-        Person andreiMatei= new Person("Andrei Matei", 2, "12-02-2002");
+        Person catalinCatalin = new Person("Catalin Catalin", 8, "12-10-1995");
+        Person andreiMatei = new Person("Andrei Matei", 2, "12-02-2002");
 
-        List <Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin,andreiMatei);
+        List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin, andreiMatei);
         printList(listOfEntities, Utils.TypesOfPrinting.BULK);
         printList(listOfEntities, Utils.TypesOfPrinting.ONE_BY_ONE);
 

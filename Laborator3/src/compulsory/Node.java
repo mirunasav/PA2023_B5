@@ -6,7 +6,6 @@ public interface Node {
     //of an interface are implicitly public
     String getName ();
     Integer getNodeImportance();
-
     void printConnections();
 
 }

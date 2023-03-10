@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Company implements Comparable<Node>, Node {
-
     private String name;
     private String country;
     private int numberOfEmployees = 0;
@@ -27,20 +26,22 @@ public class Company implements Comparable<Node>, Node {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
 
-    @Override
     public Integer getNodeImportance() {
         return this.getNumberOfEmployees();
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+
+    @Override
     public void printConnections() {
-        System.out.println( this.getName() +" are " + this.getNodeImportance() + " conexiuni");
-        System.out.println("Compania "+ this.getName() + " are angajatii: ");
-        for(Person person : employees)
+        System.out.println(this.getName() + " are " + this.getNodeImportance() + " conexiuni");
+        System.out.println("Compania " + this.getName() + " are angajatii: ");
+        for (Person person : employees)
             System.out.print(person.getName() + "   ");
         System.out.println();
     }
@@ -71,6 +72,11 @@ public class Company implements Comparable<Node>, Node {
 
     public void setEmployees(List<Person> employees) {
         this.employees = employees;
+    }
+
+    public void addEmployee(Person person) {
+        this.numberOfEmployees++;
+        this.employees.add(person);
     }
 
     @Override

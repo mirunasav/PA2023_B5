@@ -87,7 +87,7 @@ public class Utils {
 
         //pe urma generez indecsi random si vad daca pot adauga listOFEntities.get(i)
         // la lista de conexiuni e persoanei pe care o conectez
-        int maxNumberOfConnections = getMaxConnections(listOfEntities);
+        int maxNumberOfConnections = getMaxConnections(listOfEntities) ;
         for (Node person : listOfEntities)
             if (person instanceof Person) {
                 int maxConnections = generateNumber(1, maxNumberOfConnections);
@@ -103,21 +103,15 @@ public class Utils {
                             if (listOfEntities.get(index) instanceof Person)
                             {
                                 //creez conexiunea in ambele liste
-                                ((Person) person).getConnections().put(listOfEntities.get(index), TypesOfRelationships.COWORKERS);
-                                ((Person) listOfEntities.get(index)).getConnections().put(person, TypesOfRelationships.COWORKERS);
+                                ((Person) person).addRelationship((Person) listOfEntities.get(index),TypesOfRelationships.COWORKERS);
+                                ((Person) listOfEntities.get(index)).addRelationship((Person) person, TypesOfRelationships.COWORKERS);
                             }
 
                             if (listOfEntities.get(index) instanceof Company && !((Person) person).isEmployed()) {
                                 //daca nodul cu care fac legatura e o companie: marchez omul ca si angajat
                                 //maresc nr de employees al companiei si adaug omul in lista de angajati
-                                ((Person) person).setEmployed(true);
-                                int formerEmployeeCount =((Company) listOfEntities.get(index)).getNumberOfEmployees();
-                                ((Company) listOfEntities.get(index)).setNumberOfEmployees(formerEmployeeCount+1);
-                                ((Company) listOfEntities.get(index)).getEmployees().add((Person) person);
-                                if (person instanceof Programmer)
-                                    ((Person) person).getConnections().put(listOfEntities.get(index), TypesOfRelationships.WORKS_AS_PROGRAMMER);
-                                if (person instanceof Designer)
-                                    ((Person) person).getConnections().put(listOfEntities.get(index), TypesOfRelationships.WORKS_AS_DESIGNER);
+                                ((Person) person).addEmployment((Company) listOfEntities.get(index));
+                                ((Company) listOfEntities.get(index)).addEmployee((Person) person);
                             }
 
                         }

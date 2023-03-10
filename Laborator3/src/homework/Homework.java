@@ -24,6 +24,8 @@ public class Homework {
         Network smallNetwork = new Network(listOfEntities);
         smallNetwork.orderNetworkNodes();
         smallNetwork.printNetworkConnections();
+        smallNetwork.createConnectionsGraph();
+
 
     }
 }

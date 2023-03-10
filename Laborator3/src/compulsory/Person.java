@@ -1,5 +1,7 @@
 package compulsory;
 
+import homework.Designer;
+import homework.Programmer;
 import utilities.Utils;
 
 import java.text.ParseException;
@@ -57,11 +59,10 @@ public class Person implements Comparable<Node>, Node {
 
     @Override
     public void printConnections() {
-        System.out.println( this.getName() +" are " + this.getNodeImportance() + " conexiuni");
+        System.out.println(this.getName() + " are " + this.getNodeImportance() + " conexiuni");
 
-        System.out.println("conexiunile lui " + this.getName() +" : ");
-        for(Map.Entry<Node, Utils.TypesOfRelationships> entry : this.getConnections().entrySet())
-        {
+        System.out.println("conexiunile lui " + this.getName() + " : ");
+        for (Map.Entry<Node, Utils.TypesOfRelationships> entry : this.getConnections().entrySet()) {
             System.out.println(entry.getKey().getName() + " " + entry.getValue());
         }
         System.out.println();
@@ -101,6 +102,18 @@ public class Person implements Comparable<Node>, Node {
 
     public void setConnections(Map<Node, Utils.TypesOfRelationships> connections) {
         this.connections = connections;
+    }
+
+    public void addRelationship(Person person, Utils.TypesOfRelationships typeOfRelationship) {
+        this.connections.put(person, typeOfRelationship);
+    }
+
+    public void addEmployment(Company company) {
+        this.setEmployed(true);
+        if (this instanceof Programmer)
+            this.connections.put(company, Utils.TypesOfRelationships.WORKS_AS_PROGRAMMER);
+        if (this instanceof Designer)
+            this.connections.put(company, Utils.TypesOfRelationships.WORKS_AS_DESIGNER);
     }
 
     @Override
