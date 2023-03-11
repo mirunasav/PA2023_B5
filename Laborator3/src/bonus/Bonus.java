@@ -27,8 +27,7 @@ public class Bonus {
         Person costinPreotu= new Programmer("Costin Preotu", 1, "12-10-2002","Python");
         Person mariaAlexa= new Designer("Maria Alexa", 2, "12-05-2002",1);
 
-        List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin,andreiMatei,
-                andreeaMircea, costinPreotu, mariaAlexa);
+        List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin,andreiMatei,andreeaMircea);
 
         Network smallNetwork = new Network(listOfEntities);
         smallNetwork.orderNetworkNodes();
@@ -39,6 +38,6 @@ public class Bonus {
         Solution  connectedComponentsSolution = new Solution(smallNetwork, TypeOfSolutions.FIND_ARTICULATION_POINTS);
         System.out.println();
 
-        Solution solution = new Solution(smallNetwork, TypeOfSolutions.FIND_2CONNECTED_COMPONENTS);
+        Solution solution = new Solution(smallNetwork, TypeOfSolutions.FIND_MAXIMALLY2CONNECTED_COMPONENTS);
     }
 }

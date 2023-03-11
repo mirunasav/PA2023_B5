@@ -3,7 +3,10 @@ package bonus;
 import compulsory.Node;
 import compulsory.Person;
 import homework.Network;
+import utilities.Utils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +21,8 @@ public class Solution {
                 this.printArticulationPoints(this.findArticulationPoints(this.getNetwork().getListOfEntities()));
             }
             case FIND_2CONNECTED_COMPONENTS -> this.print2ConnectedComponents(this.find2ConnectedComponents());
+            case FIND_MAXIMALLY2CONNECTED_COMPONENTS ->
+                    this.print2ConnectedComponents(this.findMaximally2ConnectedComponents());
         }
     }
 
@@ -112,6 +117,22 @@ public class Solution {
                 System.out.println("Nodul " + node.getName() + " este punct de articulatie in retea!");
     }
 
+    private List<List<Node>> createConnectedComponents() {
+        List<List<Node>> listOf2ConnectedComponents = new LinkedList<>();
+
+        boolean[] visited = new boolean[this.getNetwork().getListOfEntities().size()];
+
+        for (int index = 0; index < this.getNetwork().getListOfEntities().size(); index++) {
+            if (!visited[index]) {
+                List<Node> connectedComponents = new LinkedList<>();
+                connectedComponents = recursiveDFS(this.getNetwork().getListOfEntities(), index, visited);
+                if (connectedComponents.size() != 0)
+                    listOf2ConnectedComponents.add(connectedComponents);
+            }
+        }
+        return listOf2ConnectedComponents;
+    }
+
     /*
     I have to find the subgraphs that are MAXIMALLY 2-connected -> 1 connected (if I remove one vertex, it disconnects -> they have articulation points)
     2 connected : they don't have any articulation points; I can remove any 2 vertexes and they become disconnected
@@ -125,16 +146,8 @@ public class Solution {
         //si cumva ar tb sa iau mai multe combinatii?
 
         List<List<Node>> listOf2ConnectedComponents = new LinkedList<>();
-        boolean[] visited = new boolean[this.getNetwork().getListOfEntities().size()];
+        listOf2ConnectedComponents = this.createConnectedComponents();
 
-        for (int index = 0; index < this.getNetwork().getListOfEntities().size(); index++) {
-            if (!visited[index]) {
-                List<Node> connectedComponents = new LinkedList<>();
-                connectedComponents = recursiveDFS(this.getNetwork().getListOfEntities(), index, visited);
-                if (connectedComponents.size() != 0)
-                    listOf2ConnectedComponents.add(connectedComponents);
-            }
-        }
         //acum, in listOf2ConnectedComponents am componentele conexe ale grafului; cum verific ca sunt maxim 2 conexe?
         // 1. au pct de articulatie; nu au? -> 2.scot doua noduri si vad daca mai sunt conexe
 
@@ -145,14 +158,43 @@ public class Solution {
             System.out.println();
             System.out.println();
         }
-        for(List <Node> connectedComponent : listOf2ConnectedComponents)
-        {
-            if(!this.isMax2Connected(connectedComponent))
-                listOf2ConnectedComponents.remove(connectedComponent);
+
+        Iterator<List<Node>> iterator = listOf2ConnectedComponents.iterator();
+        while (iterator.hasNext()) {
+            List<Node> connectedComponent = iterator.next();
+            if (!this.isMax2Connected(connectedComponent))
+                iterator.remove();
         }
-       // listOf2ConnectedComponents.removeIf(connectedcomponent -> !this.isMax2Connected(connectedcomponent));
+
+        //the method below throws ConcurrentModificationException!!
+
+//        for(List <Node> connectedComponent : listOf2ConnectedComponents)
+//        {
+//            if(!this.isMax2Connected(connectedComponent))
+//                listOf2ConnectedComponents.remove(connectedComponent);
+//        }
+        // listOf2ConnectedComponents.removeIf(connectedcomponent -> !this.isMax2Connected(connectedcomponent));
 
         return listOf2ConnectedComponents;
+    }
+
+    /**
+     * @return componentele maximally 2 connected;
+     * Idee: iau componentele conexe, verific daca sunt 2 conexe; verific care e gradul minim (trebuie sa fie 2)
+     */
+    private List<List<Node>> findMaximally2ConnectedComponents() {
+        List<List<Node>> connectedComponentsList = this.createConnectedComponents();
+        Iterator<List<Node>> iterator = connectedComponentsList.iterator();
+        while (iterator.hasNext()) {
+            List<Node> connectedComponent = iterator.next();
+            if (connectedComponent.size() < 3) {
+                iterator.remove();
+                continue;
+            }
+            if(!isMaximally2Connected(connectedComponent))
+                iterator.remove();
+        }
+        return connectedComponentsList;
     }
 
     private List<Node> recursiveDFS(List<Node> listOfNodes, int index, boolean[] visited) {
@@ -171,6 +213,10 @@ public class Solution {
         return connectedComponents;
     }
 
+    /**
+     * @param graph
+     * @return daca e >2connected, returneaza false; daca e <2 connected, true
+     */
     private boolean isMax2Connected(List<Node> graph) {
         // pt fiecare componenta conexa, verific ->
         // 1. daca au  puncte de articulatie (au:atunci e clar macar 2 connected, ca orice nod as scoate nu se deconecteaza)
@@ -183,22 +229,41 @@ public class Solution {
         if (!this.hasArticulationPoints(graph))
             return true;
 
-        graph.remove(0);
-        graph.remove(0);
+        List<Node> copyOfGraph = new LinkedList<>(graph);
+
+        return !this.is2Connected(copyOfGraph);
+    }
+
+
+    /**
+     * @param graph
+     * @return: true, daca e >2 conex; false, altfel
+     */
+    private boolean is2Connected(List<Node> graph) {
+        List<Node> copyOfGraph = new LinkedList<>(graph);
+        copyOfGraph.remove(0);
+        copyOfGraph.remove(0);
         //fac o lista in care retin nodurile din DFS traversal : daca graful ar fi >2conex, as avea toate nodurile in DFS traversal
 
         List<Node> DFSTraversalList = new LinkedList<>();
-        boolean[] visited = new boolean[graph.size()];
+        boolean[] visited = new boolean[copyOfGraph.size()];
         for (boolean value : visited)
             value = false;
 
-        DFSTraversalList = recursiveDFS(graph, 0, visited);
-        //verific daca toate nodurile din graf sunt in DFSTraversal; daca macar unul nu e , atunci e ok graful e max 2conex
-        for (Node node : graph)
-            if (!DFSTraversalList.contains(node))
-                return true;
+        DFSTraversalList = recursiveDFS(copyOfGraph, 0, visited);
+        //verific daca toate nodurile din graf sunt in DFSTraversal; daca macar unul nu e , atunci graful nu e 2conex
+        for (Node node : copyOfGraph)
+            if (!DFSTraversalList.contains(node)) {
+                return false;
+            }
+        return true;
+    }
 
-        return false;
+    protected boolean isMaximally2Connected(List <Node> graph)
+    {
+        if(!(this.is2Connected(graph) && Utils.minimumGraphDegree(graph)==2))
+            return false;
+        return true;
     }
 
     private boolean hasArticulationPoints(List<Node> graph) {
@@ -220,6 +285,12 @@ public class Solution {
 }
 
 
-//Auzi dar daca pt fiecare componenta conexa mai intai verific ->
-//1. sa nu aiba puncte de articulatie (atunci e clar macar 2 connected, ca orice nod as scoate nu se deconecteaza)
-//2. scot 2 noduri random dupa, daca se deconecteaza atunci clar nu e mai mult de 2 connected
+/*
+Ce inteleg prin maximally 2 connected ?
+sa fie 1-connected sau 2connected, dar nu mai mult de atat
+
+Notiunea 2:
+"A graph is said to be maximally connected if its connectivity equals its minimum degree"
+
+In cazul nostru : un graf e maximally 2 connnected daca e 2connected si gradul minim al unui nod este 2
+ */
