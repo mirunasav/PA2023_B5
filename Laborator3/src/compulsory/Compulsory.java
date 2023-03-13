@@ -25,6 +25,7 @@ public class Compulsory {
         List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin, andreiMatei);
         printList(listOfEntities, Utils.TypesOfPrinting.BULK);
         printList(listOfEntities, Utils.TypesOfPrinting.ONE_BY_ONE);
+        new Node.bar();
 
     }
 }
