@@ -7,7 +7,7 @@ public class Student implements Comparable<Student> {
     String name;
     List<org.example.compulsory.Project> admissableProjects;
 
-    public Student(String name, List <org.example.compulsory.Project> listOfAdmissableProjects) {
+    public Student(String name, List<org.example.compulsory.Project> listOfAdmissableProjects) {
         this.name = name;
         this.admissableProjects = listOfAdmissableProjects;
     }
