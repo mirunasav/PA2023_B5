@@ -16,7 +16,6 @@ public class Network {
 
     public Network(List<Node> listOfEntities) {
         this.listOfEntities = listOfEntities;
-        createConnections(listOfEntities);
     }
 
     public List<Node> getListOfEntities() {

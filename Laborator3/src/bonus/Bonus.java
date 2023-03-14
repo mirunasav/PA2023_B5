@@ -9,6 +9,7 @@ import homework.Programmer;
 
 import java.util.List;
 
+import static utilities.Utils.createConnections;
 import static utilities.Utils.createList;
 
 public class Bonus {
@@ -30,6 +31,7 @@ public class Bonus {
         List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin,andreiMatei,andreeaMircea);
 
         Network smallNetwork = new Network(listOfEntities);
+        createConnections(listOfEntities);
         smallNetwork.orderNetworkNodes();
       //  smallNetwork.printNetworkConnections();
         smallNetwork.createConnectionsGraph();
@@ -38,6 +40,7 @@ public class Bonus {
         Solution  connectedComponentsSolution = new Solution(smallNetwork, TypeOfSolutions.FIND_ARTICULATION_POINTS);
         System.out.println();
 
-        Solution solution = new Solution(smallNetwork, TypeOfSolutions.FIND_MAXIMALLY2CONNECTED_COMPONENTS);
+        Solution findMaximally2ConnectedComponents = new Solution(smallNetwork, TypeOfSolutions.FIND_MAXIMALLY2CONNECTED_COMPONENTS);
+
     }
 }

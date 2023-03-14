@@ -22,6 +22,7 @@ public class Homework {
         List<Node> listOfEntities = createList(Emag, Facebook, Google, mariusPop, andreiStan, catalinCatalin,andreiMatei);
 
         Network smallNetwork = new Network(listOfEntities);
+        createConnections(listOfEntities);
         smallNetwork.orderNetworkNodes();
         smallNetwork.printNetworkConnections();
         smallNetwork.createConnectionsGraph();
