@@ -1,4 +1,4 @@
-package org.example.compulsory;
+package org.example;
 
 import java.util.Comparator;
 import java.util.List;
