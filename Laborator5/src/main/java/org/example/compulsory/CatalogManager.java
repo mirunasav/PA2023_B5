@@ -49,4 +49,13 @@ public class CatalogManager {
             exception.printStackTrace();
         }
     }
+
+    public static String toString(Catalog catalog) {
+        StringBuilder string = new StringBuilder();
+        string.append("Catalogul contine: ");
+        for (Document document : catalog.getEntries()) {
+            string.append(document.toString());
+        }
+        return string.toString();
+    }
 }

@@ -15,7 +15,7 @@ public class Document {
     private String pathName;
     private Map<TypesOfTags, String> tag;
 
-    public Document(int ID, String name, String pathName,Map<TypesOfTags, String> tag) {
+    public Document(int ID, String name, String pathName, Map<TypesOfTags, String> tag) {
         this.ID = ID;
         this.name = name;
         setPathName(pathName);
@@ -68,6 +68,18 @@ public class Document {
             exception.printStackTrace();
             return false;
         }
+    }
+
+    public String toString() {
+        String string = "ID: " +
+                this.getID() +
+                " name: " +
+                this.getName() +
+                " Pathname: " +
+                this.getPathName() +
+                " Tag: " +
+                this.getTag().toString();
+        return string;
     }
 
 
