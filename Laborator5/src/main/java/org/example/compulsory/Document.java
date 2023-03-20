@@ -71,7 +71,7 @@ public class Document {
     }
 
     public String toString() {
-        String string = "ID: " +
+        return "ID: " +
                 this.getID() +
                 " name: " +
                 this.getName() +
@@ -79,7 +79,6 @@ public class Document {
                 this.getPathName() +
                 " Tag: " +
                 this.getTag().toString();
-        return string;
     }
 
 
