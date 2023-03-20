@@ -25,27 +25,4 @@ public class Catalog {
         this.entries = entries;
     }
 
-    public void add(Document newDocument) {
-        this.entries.add(newDocument);
-    }
-
-    public void save() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File("output.json"), this.entries);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    public void load() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Document[] newDocuments = mapper.readValue(Paths.get("output.json").toFile(), Document[].class);
-            Arrays.stream(newDocuments).forEach(this::add);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-    }
 }

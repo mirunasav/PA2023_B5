@@ -5,14 +5,17 @@ import javafx.util.Pair;
 import java.net.URL;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.Map;
+
+import static org.example.compulsory.Utilities.isPathValid;
 
 public class Document {
     private int ID;
     private String name;
     private String pathName;
-    private Pair<TypesOfTags, String> tag;
+    private Map<TypesOfTags, String> tag;
 
-    public Document(int ID, String name, String pathName, Pair<TypesOfTags, String> tag) {
+    public Document(int ID, String name, String pathName,Map<TypesOfTags, String> tag) {
         this.ID = ID;
         this.name = name;
         setPathName(pathName);
@@ -32,11 +35,11 @@ public class Document {
     }
 
     public void setPathName(String pathName) {
-        if (this.isPathValid(pathName))
+        if (isPathValid(pathName))
             this.pathName = pathName;
     }
 
-    public void setTag(Pair<TypesOfTags, String> tag) {
+    public void setTag(Map<TypesOfTags, String> tag) {
         this.tag = tag;
     }
 
@@ -48,11 +51,11 @@ public class Document {
         return this.name;
     }
 
-    public String getPath() {
+    public String getPathName() {
         return this.pathName;
     }
 
-    public Pair<TypesOfTags, String> getTag() {
+    public Map<TypesOfTags, String> getTag() {
         return this.tag;
     }
 
@@ -67,16 +70,5 @@ public class Document {
         }
     }
 
-    public boolean isPathValid(String path) {
 
-        try {
-
-            Paths.get(path);
-
-        } catch (InvalidPathException ex) {
-            return false;
-        }
-
-        return true;
-    }
 }
