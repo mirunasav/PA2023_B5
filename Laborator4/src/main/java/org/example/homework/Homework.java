@@ -21,7 +21,7 @@ public class Homework {
         printStudents(lowPreferencesStudents(instanceOfProblem.getStudentList()
                 .toArray(Student[]::new)));
 
-        Problem randomInstanceOfProblem = createRandomProblemInstance();
+        Problem randomInstanceOfProblem = createRandomProblemInstance(100,50);
         System.out.println(randomInstanceOfProblem);
 
         printStudentPreferences(randomInstanceOfProblem);

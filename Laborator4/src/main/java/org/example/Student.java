@@ -1,9 +1,11 @@
 package org.example;
 
+import org.example.bonus.Node;
+
 import java.util.Comparator;
 import java.util.List;
 
-public class Student implements Comparable<Student> {
+public class Student implements Comparable<Student> , Node {
     String name;
     List<org.example.compulsory.Project> admissableProjects;
 
@@ -31,5 +33,10 @@ public class Student implements Comparable<Student> {
     @Override
     public int compareTo(Student o) {
         return this.getName().compareTo(o.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name + " ";
     }
 }
