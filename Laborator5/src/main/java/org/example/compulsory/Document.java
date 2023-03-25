@@ -2,8 +2,11 @@ package org.example.compulsory;
 
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -13,13 +16,15 @@ public class Document {
     private int ID;
     private String name;
     private String pathName;
-    private Map<TypesOfTags, String> tag;
+    private Map<TypesOfTags, String> tags;
 
-    public Document(int ID, String name, String pathName, Map<TypesOfTags, String> tag) {
+    private boolean isLocal;
+
+    public Document(int ID, String name, String pathName, Map<TypesOfTags, String> tags) throws FileNotFoundException {
         this.ID = ID;
         this.name = name;
-        setPathName(pathName);
-        this.tag = tag;
+        this.setPathName(pathName);
+        this.tags= tags;
     }
 
     public Document() {
@@ -34,17 +39,28 @@ public class Document {
         this.name = name;
     }
 
-    public void setPathName(String pathName) {
-        if (isPathValid(pathName))
+    public void setPathName(String pathName) throws FileNotFoundException {
+        try {
+            new URL(pathName).toURI();
             this.pathName = pathName;
+            this.isLocal = false;
+        } catch (Exception exception) {
+            File file = new File(pathName);
+            if (file.exists()) {
+                this.pathName = pathName;
+                this.isLocal = true;
+            } else throw new FileNotFoundException();
+        }
     }
 
-    public void setTag(Map<TypesOfTags, String> tag) {
-        this.tag = tag;
-    }
 
     public int getID() {
         return this.ID;
+    }
+
+    public boolean getIsLocal()
+    {
+        return this.isLocal;
     }
 
     public String getName() {
@@ -55,8 +71,8 @@ public class Document {
         return this.pathName;
     }
 
-    public Map<TypesOfTags, String> getTag() {
-        return this.tag;
+    public Map<TypesOfTags, String> getTags() {
+        return this.tags;
     }
 
     boolean isURLValid(String URL) {
@@ -78,7 +94,7 @@ public class Document {
                 " Pathname: " +
                 this.getPathName() +
                 " Tag: " +
-                this.getTag().toString();
+                this.getTags().toString();
     }
 
 

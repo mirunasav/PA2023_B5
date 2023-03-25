@@ -1,26 +1,19 @@
 package org.example.compulsory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.scene.shape.Path;
+import exceptions.DesktopNotSupportedException;
+import exceptions.DocumentNotFoundException;
+import homework.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-
-import static org.example.compulsory.Utilities.isPathValid;
+import java.net.URISyntaxException;
 
 public class CatalogManager {
     public static void add(Catalog catalog, Document document) {
-        catalog.getEntries().add(document);
+        AddComand add = new AddComand(catalog, document);
     }
 
     public static void save(Catalog catalog) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File("output.json"), catalog);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        SaveCommand save = new SaveCommand(catalog);
     }
 
     public static void load(Catalog catalog, String fileName) {
@@ -39,15 +32,11 @@ public class CatalogManager {
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //        }
-        if (!isPathValid(fileName))
-            return;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            catalog = mapper.readValue(Paths.get(fileName).toFile(), Catalog.class);
-            catalog.getEntries().forEach(System.out::println);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+        LoadCommand load = new LoadCommand(catalog, fileName);
+    }
+
+    public static void listDocuments(Catalog catalog) {
+        ListCommand list = new ListCommand(catalog);
     }
 
     public static String toString(Catalog catalog) {
@@ -58,4 +47,41 @@ public class CatalogManager {
         }
         return string.toString();
     }
+
+    public static Document findDocument(Catalog catalog, String name) {
+        try {
+            FindCommand find = new FindCommand(catalog, name);
+            return find.getDocument();
+        } catch (DocumentNotFoundException exception) {
+            System.out.println("Documentul cu numele " + name + " nu exista!");
+            return null;
+        }
+    }
+
+    public static void viewDocument(Catalog catalog, String name) {
+        try {
+            ViewCommand view = new ViewCommand(catalog, name);
+        } catch (IOException exception) {
+            System.out.println("Could not open file!");
+        } catch (DesktopNotSupportedException exception) {
+            System.out.println("Desktop not supported!");
+        } catch (URISyntaxException exception) {
+            System.out.println("URI syntax is not right!");
+        }
+
+    }
+
+    public static void generateReport(Catalog catalog) {
+        ReportCommand report = new ReportCommand(catalog);
+    }
+
+    public static void getInformation(Catalog catalog) {
+        try {
+            InfoCommand info = new InfoCommand(catalog);
+        } catch (Exception exception) {
+            System.out.println("Exceptie la infoCommand");
+        }
+
+    }
+
 }
