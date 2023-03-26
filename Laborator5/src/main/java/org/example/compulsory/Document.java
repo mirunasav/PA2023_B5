@@ -49,7 +49,7 @@ public class Document {
             if (file.exists()) {
                 this.pathName = pathName;
                 this.isLocal = true;
-            } else throw new FileNotFoundException();
+            } //else throw new FileNotFoundException();
         }
     }
 
