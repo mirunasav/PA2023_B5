@@ -92,6 +92,7 @@ public class DrawingPanel extends JPanel {
             graphics.fillOval(x[i]-diameter/2, y[i]-diameter/2, diameter, diameter);
         }
 
+        graphics.setColor(Color.lightGray);
         //painting the lines
         for(int i = 0; i<numVertices-1; i++){
             for(int j = i+1; j<numVertices; j++){
