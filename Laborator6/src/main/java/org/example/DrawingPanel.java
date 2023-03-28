@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class DrawingPanel extends JPanel {
 
@@ -32,21 +33,21 @@ public class DrawingPanel extends JPanel {
     private void initPanel() {
         setPreferredSize(new Dimension(W, H));
         setBorder(BorderFactory.createEtchedBorder());
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-              repaint();
-            }
-        });
+//        this.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//              repaint();
+//            }
+//        });
     }
-    final void createBoard(Graphics graphics) {
-        numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
-        edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
-        createVertices();
-        drawLines();
-       // drawVertices();
-        //repaint();
-    }
+//    final void createBoard(Graphics graphics) {
+//        numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
+//        edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
+//        createVertices();
+//        drawLines();
+//       // drawVertices();
+//        //repaint();
+//    }
 
     private void createVertices() {
         int x0 = W / 2;
@@ -81,6 +82,7 @@ public class DrawingPanel extends JPanel {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0,0,W,H);
 
+        //painting the vertexes
         graphics.setColor(Color.BLACK);
         numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
         edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
@@ -88,6 +90,18 @@ public class DrawingPanel extends JPanel {
         int diameter = 20;
         for (int i = 0; i < numVertices; i++){
             graphics.fillOval(x[i]-diameter/2, y[i]-diameter/2, diameter, diameter);
+        }
+
+        //painting the lines
+        for(int i = 0; i<numVertices-1; i++){
+            for(int j = i+1; j<numVertices; j++){
+                //verificam daca am muchie intre nodurile i si j
+                Random random = new Random();
+                double randomNumber = random.nextDouble();
+                if(randomNumber <= edgeProbability){
+                    graphics.drawLine(x[i], y[i], x[j],y[j]);
+                }
+            }
         }
     }
 

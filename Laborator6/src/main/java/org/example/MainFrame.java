@@ -26,17 +26,6 @@ public class MainFrame extends JFrame {
         configPanel = new ConfigPanel(this);
         controlPanel = new ControlPanel(this);
         canvas = new DrawingPanel(this);
-//
-//        JMenuBar menuBar = new JMenuBar();
-//        JMenu configMenu = new JMenu("Config");
-//        configMenu.add(configPanel);
-//        menuBar.add(configMenu);
-//
-//        //setJMenuBar(menuBar);
-//
-//        JPanel centerPanel = new JPanel(new BorderLayout());
-//       // centerPanel.add(configPanel, BorderLayout.NORTH);
-//        centerPanel.add(canvas, BorderLayout.CENTER);
 
         add(canvas, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
