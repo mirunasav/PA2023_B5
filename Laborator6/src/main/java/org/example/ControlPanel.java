@@ -59,7 +59,7 @@ public class ControlPanel extends JPanel{
         }
 
         catch (ClassNotFoundException exception){
-            System.out.println("ClassNotFound  exception!");
+            System.out.println("IO exception!");
         }
 
     }

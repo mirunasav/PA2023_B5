@@ -1,111 +1,196 @@
 package org.example;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.io.*;
 
-public class DrawingPanel extends JPanel {
-
+public class DrawingPanel extends JPanel{
     final MainFrame frame;
     final static int W = 800, H = 600;
-    private int numVertices;
-    private double edgeProbability;
-    private int[] x, y;
 
-    BufferedImage image;
-    Graphics2D graphics;
+    private BufferedImage image;
+    private Graphics2D graphics;
 
+    //game state
+    private GameState game;
 
-    private void init(){
-     // createOffscreenImage();
-        initPanel();
-      //  createBoard();
-    }
-    public DrawingPanel(MainFrame frame) {
+    public DrawingPanel(MainFrame frame){
         this.frame = frame;
-        this.init();
+        createOffscreenImage();
+        initPanel();
     }
 
-    private void initPanel() {
+    private void initPanel(){
         setPreferredSize(new Dimension(W, H));
         setBorder(BorderFactory.createEtchedBorder());
-//        this.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//              repaint();
-//            }
-//        });
-    }
-//    final void createBoard(Graphics graphics) {
-//        numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
-//        edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
-//        createVertices();
-//        drawLines();
-//       // drawVertices();
-//        //repaint();
-//    }
-
-    private void createVertices() {
-        int x0 = W / 2;
-        int y0 = H / 2; //middle of the board
-        int radius = H / 2 - 10; //board radius
-        double alpha = 2 * Math.PI / numVertices; // the angle
-        x = new int[numVertices];
-        y = new int[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            x[i] = x0 + (int) (radius * Math.cos(alpha * i));
-            y[i] = y0 + (int) (radius * Math.sin(alpha * i));
-        }
-    }
-
-    private void drawLines() {
-
-    }
-
-    private void drawVertices() {
-      int diameter = 50;
-        for (int i = 0; i < numVertices; i++){
-           graphics.drawOval(x[i]-diameter/2, y[i]-diameter/2, diameter, diameter);
-        }
-    }
-
-    @Override
-    public void update(Graphics g) {
-    } //No need for update
-
-    @Override
-    protected void paintComponent(Graphics graphics) {
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(0,0,W,H);
-
-        //painting the vertexes
-        graphics.setColor(Color.BLACK);
-        numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
-        edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
-        createVertices();
-        int diameter = 20;
-        for (int i = 0; i < numVertices; i++){
-            graphics.fillOval(x[i]-diameter/2, y[i]-diameter/2, diameter, diameter);
-        }
-
-        //painting the lines
-        for(int i = 0; i<numVertices-1; i++){
-            for(int j = i+1; j<numVertices; j++){
-                //verificam daca am muchie intre nodurile i si j
-                Random random = new Random();
-                double randomNumber = random.nextDouble();
-                if(randomNumber <= edgeProbability){
-                    graphics.drawLine(x[i], y[i], x[j],y[j]);
+        this.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // change state of game
+                System.out.println("click");
+                int x = e.getX();
+                int y = e.getY();
+                System.out.println(x + " " + y);
+                if(game == null)
+                    return;
+                if(game.won) {
+                    System.out.println("gata joc");
+                    return;
                 }
+
+                for(int i=0;i<game.numVertices;i++)
+                    if(Math.abs(game.x[i] - x) < 10  && Math.abs(game.y[i] - y) < 10){
+                        //select
+                        if(game.selected == -1){
+                            game.selected = i;
+                            selectPoint(game.selected, 1);
+                        }
+                        else{
+                            //deselect
+                            if(i==game.selected){
+                                selectPoint(game.selected, 0);
+                                game.selected = -1;
+                            }
+                            else
+                                nextState(game.selected, i);
+                        }
+                        repaint();
+                    }
             }
+        });
+    }
+    private void selectPoint(int x, int state){
+        System.out.println("selectez punct");
+        if(state == 1){
+            graphics.setColor(Color.YELLOW);
+            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
+        }
+        else{
+            graphics.setColor(Color.BLACK);
+            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
         }
     }
+    private void nextState(int x, int y){
+        if(game.addEdge(x, y) == false) {
+            graphics.setColor(Color.BLACK);
+            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
+            graphics.fillOval(game.x[y]-5, game.y[y]-5, 10, 10);
+            game.selected = -1;
+            System.out.println("aici?");
+            return;
+        }
 
-    private void drawVertex(int x, int y,Graphics graphics) {
-        int diameter = 50;
+        int color;
+        if(game.turn == 0){
+            graphics.setColor(Color.BLUE);
+            game.edge[x][y] = 2;
+            game.edge[y][x] = 2;
+        }
+        else {
+            graphics.setColor(Color.RED);
+            game.edge[x][y] = 3;
+            game.edge[y][x] = 3;
+        }
+        game.turn = 1 - game.turn;
+        game.selected = -1;
+        graphics.drawLine(game.x[x], game.y[x], game.x[y], game.y[y]);
+        graphics.setColor(Color.BLACK);
+        graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
+        graphics.fillOval(game.x[y]-5, game.y[y]-5, 10, 10);
+        game.won = game.win();
     }
+    public final void createBoard(){
+        game = new GameState();
+        game.numVertices= (Integer) frame.configPanel.dotsSpinner.getValue();
+        game.edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
+        game.createVertices(W, H);
+        game.createEdges();
+        createOffscreenImage();
+        drawGame();
+        repaint();
+    }
+    public final void loadBoard(){}
+    private void createOffscreenImage(){
+        image = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
+        graphics = image.createGraphics();
+        graphics.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    }
+    private void drawGame(){
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, W, H);
+        for(int i=0;i<game.numVertices;i++)
+            for(int j=i+1;j<game.numVertices;j++)
+                if(game.edge[i][j] == 1) {
+                    graphics.setColor(Color.GRAY);
+                    graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
+                }else if(game.edge[i][j] == 2){
+                    graphics.setColor(Color.BLUE);
+                    graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
+                }
+                else if(game.edge[i][j] == 3){
+                    graphics.setColor(Color.RED);
+                    graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
+                }
+
+        graphics.setColor(Color.BLACK);
+        for(int i=0;i<game.numVertices;i++)
+            graphics.fillOval(game.x[i]-5, game.y[i]-5, 10, 10);
+
+        for(int i=0;i<game.numVertices;i++)
+            if(i==game.selected){
+                graphics.setColor(Color.YELLOW);
+                graphics.fillOval(game.x[i]-5, game.y[i]-5, 10, 10);
+            }
+    }
+    public void exportGame(){
+        File outputfile = new File("savedgame.png");
+        try {
+            ImageIO.write(image, "png", outputfile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void resetGame(){
+        for(int i=0;i<game.numVertices;i++)
+            for(int j=i+1;j<game.numVertices;j++)
+                if(game.edge[i][j] != 0)
+                    game.edge[i][j] = 1;
+
+        game.won = false;
+        game.selected = -1;
+        game.turn = 0;
+        drawGame();
+        repaint();
+    }
+
+    public void saveGame() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("data.txt");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        objectOutputStream.writeObject(game);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
+
+    public void loadGame() throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream = new FileInputStream("data.txt");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        game = (GameState) objectInputStream.readObject();
+        objectInputStream.close();
+        drawGame();
+        repaint();
+    }
+    @Override
+    public void update(Graphics graphics){ }
+
+    @Override
+    protected void paintComponent(Graphics graphics){
+        graphics.drawImage(image, 0, 0, this);
+    }
+
 }
