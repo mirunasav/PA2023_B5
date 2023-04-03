@@ -3,6 +3,7 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class ControlPanel extends JPanel{
     final MainFrame frame;
@@ -23,6 +24,10 @@ public class ControlPanel extends JPanel{
 //add all buttons ...TODO
 //configure listeners for all buttons
         exitButton.addActionListener(this::exitGame);
+        saveButton.addActionListener(this::saveGame);
+        resetButton.addActionListener(this::resetGame);
+        loadButton.addActionListener(this::loadGame);
+
         this.add(loadButton);
         this.add(saveButton);
         this.add(resetButton);
@@ -31,5 +36,31 @@ public class ControlPanel extends JPanel{
 
     private void exitGame(ActionEvent e) {
         frame.dispose();
+    }
+    private void saveGame(ActionEvent e) {
+        frame.canvas.exportGame();
+        try{
+            frame.canvas.saveGame();
+        }
+        catch (IOException exception){
+            System.out.println("IO exception!");
+        }
+    }
+    private void resetGame(ActionEvent e) {
+        frame.canvas.resetGame();
+    }
+    private void loadGame(ActionEvent e) {
+        try{
+            frame.canvas.loadGame();
+        }
+
+        catch (IOException exception){
+            System.out.println("IO exception!");
+        }
+
+        catch (ClassNotFoundException exception){
+            System.out.println("ClassNotFound  exception!");
+        }
+
     }
 }
