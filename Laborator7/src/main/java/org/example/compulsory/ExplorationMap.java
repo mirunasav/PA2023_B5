@@ -39,7 +39,7 @@ public class ExplorationMap {
         synchronized (matrix[row][column]){
 
         //daca locatia nu a mai fost vizitata
-            if(totalVisitedCells == (matrix.length-1)* (matrix.length)-1)
+            if(totalVisitedCells == (matrix.length-1)* (matrix.length-1))
                 return false;
             if(!matrix[row][column].isVisited()){
                 //access shared memory

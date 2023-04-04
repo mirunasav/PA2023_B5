@@ -20,7 +20,10 @@ public class Robot implements Runnable {
         while(running){
             //generate random row and column
             if( !explore.getMap().visit(pair.getKey(), pair.getValue(), this))
+            {
                 this.running= false;
+                System.out.println("Robotul " + this.name + " s-a oprit pentru ca s-a verificat toata matricea");
+            }
 //            try
 //            {
 //                Thread.sleep(1000);
