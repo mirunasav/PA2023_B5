@@ -6,4 +6,5 @@ Homework:
 - cand turn e 1, linia colorata devine rosie
 - pot selecta & deselecta puncte
 - pot salva jocul, pot da load jocului anterior, pot da reset
+- daca un jucator face un triunghi, pierde (si castiga celalalt)
 - 
