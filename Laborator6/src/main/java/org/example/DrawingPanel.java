@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class DrawingPanel extends JPanel{
+public class DrawingPanel extends JPanel {
     final MainFrame frame;
     final static int W = 800, H = 600;
 
@@ -19,13 +19,13 @@ public class DrawingPanel extends JPanel{
     //game state
     private GameState game;
 
-    public DrawingPanel(MainFrame frame){
+    public DrawingPanel(MainFrame frame) {
         this.frame = frame;
         createOffscreenImage();
         initPanel();
     }
 
-    private void initPanel(){
+    private void initPanel() {
         setPreferredSize(new Dimension(W, H));
         setBorder(BorderFactory.createEtchedBorder());
         this.addMouseListener(new MouseInputAdapter() {
@@ -36,27 +36,25 @@ public class DrawingPanel extends JPanel{
                 int x = e.getX();
                 int y = e.getY();
                 System.out.println(x + " " + y);
-                if(game == null)
+                if (game == null)
                     return;
-                if(game.won) {
+                if (game.won) {
                     System.out.println("gata joc");
                     return;
                 }
 
-                for(int i=0;i<game.numVertices;i++)
-                    if(Math.abs(game.x[i] - x) < 10  && Math.abs(game.y[i] - y) < 10){
+                for (int i = 0; i < game.numVertices; i++)
+                    if (Math.abs(game.x[i] - x) < 10 && Math.abs(game.y[i] - y) < 10) {
                         //select
-                        if(game.selected == -1){
+                        if (game.selected == -1) {
                             game.selected = i;
                             selectPoint(game.selected, 1);
-                        }
-                        else{
+                        } else {
                             //deselect
-                            if(i==game.selected){
+                            if (i == game.selected) {
                                 selectPoint(game.selected, 0);
                                 game.selected = -1;
-                            }
-                            else
+                            } else
                                 nextState(game.selected, i);
                         }
                         repaint();
@@ -64,34 +62,34 @@ public class DrawingPanel extends JPanel{
             }
         });
     }
-    private void selectPoint(int x, int state){
+
+    private void selectPoint(int x, int state) {
         System.out.println("selectez punct");
-        if(state == 1){
+        if (state == 1) {
             graphics.setColor(Color.YELLOW);
-            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
-        }
-        else{
+            graphics.fillOval(game.x[x] - 5, game.y[x] - 5, 10, 10);
+        } else {
             graphics.setColor(Color.BLACK);
-            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
+            graphics.fillOval(game.x[x] - 5, game.y[x] - 5, 10, 10);
         }
     }
-    private void nextState(int x, int y){
-        if(game.addEdge(x, y) == false) {
+
+    private void nextState(int x, int y) {
+        if (game.addEdge(x, y) == false) {
             graphics.setColor(Color.BLACK);
-            graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
-            graphics.fillOval(game.x[y]-5, game.y[y]-5, 10, 10);
+            graphics.fillOval(game.x[x] - 5, game.y[x] - 5, 10, 10);
+            graphics.fillOval(game.x[y] - 5, game.y[y] - 5, 10, 10);
             game.selected = -1;
             System.out.println("aici?");
             return;
         }
 
         int color;
-        if(game.turn == 0){
+        if (game.turn == 0) {
             graphics.setColor(Color.BLUE);
             game.edge[x][y] = 2;
             game.edge[y][x] = 2;
-        }
-        else {
+        } else {
             graphics.setColor(Color.RED);
             game.edge[x][y] = 3;
             game.edge[y][x] = 3;
@@ -100,13 +98,14 @@ public class DrawingPanel extends JPanel{
         game.selected = -1;
         graphics.drawLine(game.x[x], game.y[x], game.x[y], game.y[y]);
         graphics.setColor(Color.BLACK);
-        graphics.fillOval(game.x[x]-5, game.y[x]-5, 10, 10);
-        graphics.fillOval(game.x[y]-5, game.y[y]-5, 10, 10);
+        graphics.fillOval(game.x[x] - 5, game.y[x] - 5, 10, 10);
+        graphics.fillOval(game.x[y] - 5, game.y[y] - 5, 10, 10);
         game.won = game.win();
     }
-    public final void createBoard(){
+
+    public final void createBoard() {
         game = new GameState();
-        game.numVertices= (Integer) frame.configPanel.dotsSpinner.getValue();
+        game.numVertices = (Integer) frame.configPanel.dotsSpinner.getValue();
         game.edgeProbability = (Double) frame.configPanel.linesCombo.getSelectedItem();
         game.createVertices(W, H);
         game.createEdges();
@@ -114,41 +113,45 @@ public class DrawingPanel extends JPanel{
         drawGame();
         repaint();
     }
-    public final void loadBoard(){}
-    private void createOffscreenImage(){
+
+    public final void loadBoard() {
+    }
+
+    private void createOffscreenImage() {
         image = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
         graphics = image.createGraphics();
         graphics.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
-    private void drawGame(){
+
+    private void drawGame() {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, W, H);
-        for(int i=0;i<game.numVertices;i++)
-            for(int j=i+1;j<game.numVertices;j++)
-                if(game.edge[i][j] == 1) {
+        for (int i = 0; i < game.numVertices; i++)
+            for (int j = i + 1; j < game.numVertices; j++)
+                if (game.edge[i][j] == 1) {
                     graphics.setColor(Color.GRAY);
                     graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
-                }else if(game.edge[i][j] == 2){
+                } else if (game.edge[i][j] == 2) {
                     graphics.setColor(Color.BLUE);
                     graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
-                }
-                else if(game.edge[i][j] == 3){
+                } else if (game.edge[i][j] == 3) {
                     graphics.setColor(Color.RED);
                     graphics.drawLine(game.x[i], game.y[i], game.x[j], game.y[j]);
                 }
 
         graphics.setColor(Color.BLACK);
-        for(int i=0;i<game.numVertices;i++)
-            graphics.fillOval(game.x[i]-5, game.y[i]-5, 10, 10);
+        for (int i = 0; i < game.numVertices; i++)
+            graphics.fillOval(game.x[i] - 5, game.y[i] - 5, 10, 10);
 
-        for(int i=0;i<game.numVertices;i++)
-            if(i==game.selected){
+        for (int i = 0; i < game.numVertices; i++)
+            if (i == game.selected) {
                 graphics.setColor(Color.YELLOW);
-                graphics.fillOval(game.x[i]-5, game.y[i]-5, 10, 10);
+                graphics.fillOval(game.x[i] - 5, game.y[i] - 5, 10, 10);
             }
     }
-    public void exportGame(){
+
+    public void exportGame() {
         File outputfile = new File("savedgame.png");
         try {
             ImageIO.write(image, "png", outputfile);
@@ -156,10 +159,11 @@ public class DrawingPanel extends JPanel{
             throw new RuntimeException(e);
         }
     }
-    public void resetGame(){
-        for(int i=0;i<game.numVertices;i++)
-            for(int j=i+1;j<game.numVertices;j++)
-                if(game.edge[i][j] != 0)
+
+    public void resetGame() {
+        for (int i = 0; i < game.numVertices; i++)
+            for (int j = i + 1; j < game.numVertices; j++)
+                if (game.edge[i][j] != 0)
                     game.edge[i][j] = 1;
 
         game.won = false;
@@ -185,11 +189,13 @@ public class DrawingPanel extends JPanel{
         drawGame();
         repaint();
     }
-    @Override
-    public void update(Graphics graphics){ }
 
     @Override
-    protected void paintComponent(Graphics graphics){
+    public void update(Graphics graphics) {
+    }
+
+    @Override
+    protected void paintComponent(Graphics graphics) {
         graphics.drawImage(image, 0, 0, this);
     }
 

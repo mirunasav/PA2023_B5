@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
-public class ControlPanel extends JPanel{
+public class ControlPanel extends JPanel {
     final MainFrame frame;
     JButton exitButton = new JButton("Exit");
     JButton loadButton = new JButton("Load");
@@ -37,28 +37,26 @@ public class ControlPanel extends JPanel{
     private void exitGame(ActionEvent e) {
         frame.dispose();
     }
+
     private void saveGame(ActionEvent e) {
         frame.canvas.exportGame();
-        try{
+        try {
             frame.canvas.saveGame();
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             System.out.println("IO exception!");
         }
     }
+
     private void resetGame(ActionEvent e) {
         frame.canvas.resetGame();
     }
+
     private void loadGame(ActionEvent e) {
-        try{
+        try {
             frame.canvas.loadGame();
-        }
-
-        catch (IOException exception){
+        } catch (IOException exception) {
             System.out.println("IO exception!");
-        }
-
-        catch (ClassNotFoundException exception){
+        } catch (ClassNotFoundException exception) {
             System.out.println("IO exception!");
         }
 

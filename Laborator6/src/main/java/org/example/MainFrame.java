@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
 
     }
 
-    public  void listenForCreate(ActionEvent actionEvent) {
-       canvas.createBoard();
+    public void listenForCreate(ActionEvent actionEvent) {
+        canvas.createBoard();
     }
 }

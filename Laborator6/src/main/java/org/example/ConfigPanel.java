@@ -11,10 +11,12 @@ public class ConfigPanel extends JPanel implements ActionListener {
     JSpinner dotsSpinner;
     JComboBox linesCombo;
     JButton createButton;
+
     public ConfigPanel(MainFrame frame) {
         this.frame = frame;
         init();
     }
+
     private void init() {
 //create the label and the spinner
         dotsLabel = new JLabel("Number of dots:");
@@ -22,7 +24,7 @@ public class ConfigPanel extends JPanel implements ActionListener {
         dotsSpinner = new JSpinner(new SpinnerNumberModel(6, 3, 100, 1));
 //create the rest of the components
 
-        Double[] s1 = {1.0, 0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1};
+        Double[] s1 = {1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1};
 
         linesCombo = new JComboBox(s1);
         linesCombo.addActionListener(this);
@@ -41,7 +43,7 @@ public class ConfigPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JComboBox comboBox = (JComboBox)  e.getSource();
+        JComboBox comboBox = (JComboBox) e.getSource();
         Double probability = (Double) comboBox.getSelectedItem();
     }
 }
