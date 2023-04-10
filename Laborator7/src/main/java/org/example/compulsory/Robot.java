@@ -8,8 +8,9 @@ public class Robot implements Runnable {
     private String name;
     private boolean running;
     Exploration explore;
-    static final int[] dx = {1,-1,0,0};
-    static final int[] dy = {0,0,1,-1};
+    static final int[] dx = {1, -1, 0, 0};
+    static final int[] dy = {0, 0, 1, -1};
+
     @Override
     public void run() {
 
@@ -17,11 +18,10 @@ public class Robot implements Runnable {
         Pair<Integer, Integer> pair = this.generateRandomCoordinates(this.explore.getMap().getTokensToExtract());
         int currentX = pair.getKey();
         int currentY = pair.getValue();
-        while(running){
+        while (running) {
             //generate random row and column
-            if( !explore.getMap().visit(pair.getKey(), pair.getValue(), this))
-            {
-                this.running= false;
+            if (!explore.getMap().visit(pair.getKey(), pair.getValue(), this)) {
+                this.running = false;
                 System.out.println("Robotul " + this.name + " s-a oprit pentru ca s-a verificat toata matricea");
             }
 //            try
@@ -38,14 +38,14 @@ public class Robot implements Runnable {
         }
     }
 
-    private Pair<Integer, Integer> generateRandomCoordinates(int n){
+    private Pair<Integer, Integer> generateRandomCoordinates(int n) {
         int x, y;
         Random rand = new Random();
 
         x = rand.nextInt(n);
         y = rand.nextInt(n);
 
-        return new Pair<>(x,y);
+        return new Pair<>(x, y);
     }
 
     public String getName() {

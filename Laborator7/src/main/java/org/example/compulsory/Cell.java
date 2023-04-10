@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Cell {
     List<Token> tokenList;
-   private boolean visited;
+    private boolean visited;
 
     public boolean isVisited() {
         return visited;
