@@ -36,10 +36,6 @@ public class ExplorationMap {
 
     public boolean visit(int row, int column, Robot robot) {
         synchronized (matrix[row][column]) {
-
-            //daca locatia nu a mai fost vizitata
-            if (totalVisitedCells == (matrix.length - 1) * (matrix.length - 1))
-                return false;
             if (!matrix[row][column].isVisited()) {
                 //access shared memory
                 //extract n random tokens
@@ -48,11 +44,17 @@ public class ExplorationMap {
                 matrix[row][column].setVisited(true);
                 this.totalVisitedCells++;
                 System.out.println("Robotul " + robot.getName() + " a visitat randul " + row + ", coloana " + column);
+                return true;
             }
-            return true;
+            return false;
         }
     }
 
+    public boolean hasCellsLeft(){
+        if (totalVisitedCells == (matrix.length - 1) * (matrix.length - 1))
+            return false;
+        return true;
+    }
     public void unvisit(int row, int column, Robot robot){
         synchronized ( matrix[row][column]) {
             this.memory.addTokensBack(matrix[row][column].getTokenList());
