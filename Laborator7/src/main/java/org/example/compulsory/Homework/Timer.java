@@ -34,7 +34,7 @@ public class Timer extends Thread {
                 Thread.sleep(1000); // wait for 1 second
             } catch (InterruptedException ignored) {
                 System.out.println("au trecut " + totalElapsedSeconds + " secunde in total");
-                running = false;
+               this.stopTimeKeeper();
             }
         }
     }

@@ -31,10 +31,12 @@ public class RobotController {
             String command = scanner.nextLine();
             this.assertCommand(command);
         }
+
         System.out.print("Robot controller s-a oprit pentru ca ");
         if (this.numberOfStoppedRobots == this.listOfSlaves.size())
             System.out.println(" s-au oprit toti robotii");
         else System.out.println(" s-a terminat de vizitat matricea");
+
         for (Robot robot : listOfSlaves) {
             System.out.println("robotul " + robot.getName() + " a plasat " + robot.getNumberOfTokensPlaced() + " tokeni");
             robot.stopExecution();
@@ -42,6 +44,12 @@ public class RobotController {
 
     }
 
+    public void stop(){
+        for (Robot robot : listOfSlaves) {
+            System.out.println("robotul " + robot.getName() + " a plasat " + robot.getNumberOfTokensPlaced() + " tokeni");
+            robot.stopExecution();
+        }
+    }
     private void assertCommand(String command) {
 
         String targetedRobot = this.getRobotName(command);

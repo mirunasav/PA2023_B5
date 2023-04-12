@@ -48,6 +48,8 @@ Algoritmul se cheama runAlgorithm si apeleaza recursiveRun(); Pt a face ca robot
 ca la compulsory, atunci in functia run a fiecaruia tb apelata functia randomRun();
 
 - pt timer, am facut un alt thread de tip daemon care
-  -ori se opreste cand e trecuta limita de timp (in cod e pusa 2 secunde ca sa nu dureze o gramada ),
+  -ori se opreste cand e trecuta limita de timp (in cod e pusa vreo 6 secunde ca sa nu dureze o gramada ),
 si atunci opreste toti robotii
-- ori se opreste cand s-a terminat de vizitat matricea si in consecinta se opreste programul.
+- ori se opreste cand s-a terminat de vizitat matricea si in consecinta se opreste programul; inainte sa se opreasca,
+afiseaza timpul total;
+- In robot controller, inainte sa se opreasca,

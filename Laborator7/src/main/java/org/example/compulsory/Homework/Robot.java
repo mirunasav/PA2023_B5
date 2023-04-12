@@ -286,7 +286,8 @@ public class Robot implements Runnable {
                 running = false;
                 if (this.explore.getMap().totalVisitedCells == (this.explore.getMap().matrix.length) * (this.explore.getMap().matrix.length)) {
                     System.out.println("s-a terminat de vizitat matricea");
-                    this.explore.robotController.running= false;
+                    this.explore.robotController.stop();
+                    Thread.currentThread().interrupt();
                 }
 
             }
