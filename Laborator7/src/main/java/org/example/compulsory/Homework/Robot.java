@@ -4,27 +4,41 @@ import javafx.util.Pair;
 
 import java.util.*;
 
+import static java.lang.System.exit;
+import static java.lang.System.in;
+
 public class Robot implements Runnable {
     private String name;
     private volatile boolean running;
     private volatile boolean paused = false;
     private volatile boolean stopped = false;
 
+    private int numberOfTokensPlaced;
+
     private Cell[][] matrix;
     private Stack<int[]> positionHistory;
 
-    private Set <int[]> deadEndPositions;
+    private Set<int[]> deadEndPositions;
 
     private int n;
     Exploration explore;
     static final int[] dx = {1, -1, 0, 0};
     static final int[] dy = {0, 0, 1, -1};
 
+
+    public int getNumberOfTokensPlaced() {
+        return numberOfTokensPlaced;
+    }
+
+    public void setNumberOfTokensPlaced(int numberOfTokensPlaced) {
+        this.numberOfTokensPlaced = numberOfTokensPlaced;
+    }
+
     @Override
     public void run() {
 
         matrix = this.explore.getMap().matrix;
-        this.systematicRun();
+        this.runAlgorithm();
 
     }
 
@@ -40,6 +54,7 @@ public class Robot implements Runnable {
 
     public void stopExecution() {
         stopped = true;
+        running = false;
         System.out.println("robotul " + this.name + " este oprit");
     }
 
@@ -57,33 +72,42 @@ public class Robot implements Runnable {
         return new Pair<>(x, y);
     }
 
-    private Pair<Integer, Integer> generateNextAvailableCoordinates(int currentX, int currentY){
-        List<Pair<Integer, Integer>> listOfPositions = new LinkedList<>();
-       //daca pot sa merg in sus, merg in sus
-        if(this.canGoTo(currentX, currentY+1))
-          listOfPositions.add(new Pair<>(currentX, currentY+1));
+    private List<int[]> generateNeighbourPositions(int currentX, int currentY) {
+        //pozitiile in care pot merge
+
+        List<int[]> listOfPositions = new LinkedList<>();
+        //daca pot sa merg in sus, merg in sus
+        if (this.canGoTo(currentX, currentY + 1))
+            listOfPositions.add(new int[]{currentX, currentY + 1});
 
         //jos
-        if(this.canGoTo(currentX, currentY-1))
-           listOfPositions.add( new Pair<>(currentX, currentY-1));
+        if (this.canGoTo(currentX, currentY - 1))
+            listOfPositions.add(new int[]{currentX, currentY - 1});
 
         //dreapta
-        if(this.canGoTo(currentX+1, currentY))
-            listOfPositions.add( new Pair<>(currentX+1, currentY));
+        if (this.canGoTo(currentX + 1, currentY))
+            listOfPositions.add(new int[]{currentX + 1, currentY});
 
         //stanga
-        if(this.canGoTo(currentX-1, currentY))
-            listOfPositions.add( new Pair<>(currentX-1, currentY));
+        if (this.canGoTo(currentX - 1, currentY))
+            listOfPositions.add(new int[]{currentX - 1, currentY});
+
+        return listOfPositions;
+    }
+
+    private Pair<Integer, Integer> generateNextAvailableCoordinates(int currentX, int currentY) {
+        List<int[]> listOfPositions = this.generateNeighbourPositions(currentX, currentY);
 
         //acum am in lista toate pozitiile valabile; aleg una random
-
-        if(listOfPositions.size()>0){
+        if (listOfPositions.size() > 0) {
             Random rand = new Random();
             int index = rand.nextInt(listOfPositions.size());//aleg nr de la 0 la size, exclusiv
-            return listOfPositions.get(index);
+            int[] coordinates = listOfPositions.get(index);
+            return new Pair<>(coordinates[0], coordinates[1]);
         }
         return null;
     }
+
 
     public String getName() {
         return name;
@@ -137,7 +161,9 @@ public class Robot implements Runnable {
         //verific daca e o pozitie valida
         if ((targetX >= 0 && targetX <= size - 1) && (targetY >= 0 && targetY <= size - 1)) {
             //verific daca e vizitata celula
-            return !this.explore.getMap().getMatrix()[targetX][targetY].isVisited();
+            if (!this.explore.getMap().getMatrix()[targetX][targetY].isVisited()) {
+                return true;
+            }
         }
         return false;
     }
@@ -157,15 +183,14 @@ public class Robot implements Runnable {
                     //daca mai sunt casute de vizitat vad daca pe asta o vizitez sau nu
                     explore.getMap().visit(currentX, currentY, this);
                     //vad daca mai am unde sa merg
-                    if(this.hasNowhereToGo(currentX, currentY)) {
+                    if (this.hasNowhereToGo(currentX, currentY)) {
                         this.running = false;
                         System.out.println("Robotul " + this.name + " s-a oprit pentru ca s-a blocat");
-                    }
-                    else{
+                    } else {
                         //mai am unde sa merg deci generez urmatoarea pozitie
                         pair = this.generateNextAvailableCoordinates(currentX, currentY);
                         currentX = pair.getKey();
-                         currentY = pair.getValue();
+                        currentY = pair.getValue();
                     }
                 }
                 try {
@@ -180,7 +205,7 @@ public class Robot implements Runnable {
         }
     }
 
-    public void systematicRun() {
+   /* public void systematicRun() {
         this.positionHistory = new Stack<>();
         this.deadEndPositions = new HashSet<>();
         int numberVisited = this.getExplore().getMap().totalVisitedCells;
@@ -201,7 +226,7 @@ public class Robot implements Runnable {
                     if (explore.getMap().visit(currentX, currentY, this)) {
                         positionHistory.push(new int[]{currentX, currentY});
                     }
-                    /*vad daca mai am unde sa merg de aici;*/
+
                     if (this.hasNowhereToGo(currentX, currentY)) {
                         this.deadEndPositions.add(new int [] {currentX, currentY});
                         //in loc sa il oprim, mergem la ultima pozitie in care totul era ok
@@ -231,7 +256,60 @@ public class Robot implements Runnable {
             if (stopped) break;
         }
     }
+*/
 
+    public void runAlgorithm() {
+        //bun, refacem traseul pt ca altfel e cam stupid
+        //o sa ii las sa calce in locurile pe care le au vizitat deja
+        //si fiecare robot face un fel de dfs
+        //adica fiecare merge as far as he can go, mentinand o stiva a ultimelor pozitii ale sale
+        //practic fiecare face cate un dfs, dar in loc de lista de adiacenta a fiecarui nod
+        //retin pozitiile unde pot sa merg
+        //merg in ele, si daca sunt nevizitate, le si vizitez si plasez acolo tokeni.
+        Pair<Integer, Integer> pair = this.generateRandomCoordinates(this.explore.getMap().getTokensToExtract());
+        int currentX = pair.getKey();
+        int currentY = pair.getValue();
+        this.running = true;
+        while (running) {
+            if (!paused) {
+                //adaug aceasta celula la setul de celule vizitate
+                //aici o marchez ca vizitata, daca ea nu e deja vizitata
+                //it shouldn't be visited tho
+                recursiveRun(currentX, currentY);
+                //mark all adjacent cells as unvisited
+                System.out.println("robotul " + this.name + " a terminat de vizitat toate celulele accesibile lui");
+                running = false;
+                if (this.explore.getMap().totalVisitedCells == (this.explore.getMap().matrix.length) * (this.explore.getMap().matrix.length)) {
+                    System.out.println("s-a terminat de vizitat matricea");
+                    this.explore.robotController.running= false;
+                }
+
+            }
+        }
+    }
+
+    public void recursiveRun(int currentX, int currentY) {
+        if (running) {
+            if (!paused) {
+                this.explore.getMap().visit(currentX, currentY, this);
+
+                Iterator<int[]> i = this.generateNeighbourPositions(currentX, currentY).listIterator();
+                while (i.hasNext()) {
+                    int[] next = i.next();
+                    if (!this.explore.getMap().getMatrix()[next[0]][next[1]].isVisited()) {
+                        try {
+                            Thread.sleep(0);
+                        } catch (Exception exception) {
+                            System.out.println(exception);
+                        }
+                        recursiveRun(next[0], next[1]);
+                    }
+                }
+            }
+
+        }
+
+    }
 
 
     public boolean validPosition(int x, int y) {

@@ -8,14 +8,15 @@ public class Exploration {
     private final SharedMemory memory;
 
     private final ExplorationMap map;
-    private final List<Robot> listOfSlaves;
+    public static  List<Robot> listOfSlaves;
     private final int numberOfRobots;
+    public RobotController robotController;
 
     public Exploration(int n, int numberOfRobots) {
         this.memory = new SharedMemory(n);
         this.map = new ExplorationMap(n, memory);
         this.numberOfRobots = numberOfRobots;
-        this.listOfSlaves = Arrays.asList(IntStream.range(0, numberOfRobots)
+        Exploration.listOfSlaves = Arrays.asList(IntStream.range(0, numberOfRobots)
                 .mapToObj(i -> new Robot("Robot" + i, false, this))
                 .toArray(Robot[]::new));
         this.start();
@@ -28,8 +29,12 @@ public class Exploration {
             thread.start();
             System.out.println("threadul pentru robotul  " + robot.getName() + " a inceput!");
         }
-        RobotController robotController = new RobotController(this.listOfSlaves);
+        Timer timeKeeper = new Timer(2);
+        timeKeeper.setDaemon(true);
+        timeKeeper.start();
+        this.robotController = new RobotController(Exploration.listOfSlaves);
         robotController.run();
+
     }
 
     public SharedMemory getMemory() {
