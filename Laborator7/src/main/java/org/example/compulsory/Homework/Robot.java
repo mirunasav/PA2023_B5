@@ -36,11 +36,16 @@ public class Robot implements Runnable {
 
     @Override
     public void run() {
-
+        Exploration.threadCounter ++;
+        System.out.println(this.name + " " + Exploration.threadCounter);
         matrix = this.explore.getMap().matrix;
         this.runAlgorithm();
+        Exploration.threadCounter--;
+        System.out.println(this.name + " " + Exploration.threadCounter);
+
 
     }
+
 
     public void pauseExecution() {
         paused = true;
@@ -194,7 +199,7 @@ public class Robot implements Runnable {
                     }
                 }
                 try {
-                    Thread.sleep(0);
+                    Thread.sleep(1000);
                 } catch (Exception exception) {
                     System.out.println(exception);
                 }
@@ -298,7 +303,7 @@ public class Robot implements Runnable {
                     int[] next = i.next();
                     if (!this.explore.getMap().getMatrix()[next[0]][next[1]].isVisited()) {
                         try {
-                            Thread.sleep(0);
+                            Thread.sleep(100);
                         } catch (Exception exception) {
                             System.out.println(exception);
                         }

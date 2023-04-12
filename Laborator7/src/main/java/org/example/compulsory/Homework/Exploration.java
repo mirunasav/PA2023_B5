@@ -9,8 +9,11 @@ public class Exploration {
 
     private final ExplorationMap map;
     public static  List<Robot> listOfSlaves;
+
+    public static int threadCounter = 0;
     private final int numberOfRobots;
     public RobotController robotController;
+
 
     public Exploration(int n, int numberOfRobots) {
         this.memory = new SharedMemory(n);
@@ -29,7 +32,7 @@ public class Exploration {
             thread.start();
             System.out.println("threadul pentru robotul  " + robot.getName() + " a inceput!");
         }
-        Timer timeKeeper = new Timer(2);
+       Timer timeKeeper = new Timer(6);
         timeKeeper.setDaemon(true);
         timeKeeper.start();
         this.robotController = new RobotController(Exploration.listOfSlaves);

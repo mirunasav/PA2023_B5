@@ -1,5 +1,7 @@
 package org.example.compulsory.Homework;
 
+import org.example.compulsory.Exploration;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -24,17 +26,20 @@ public class RobotController {
         Scanner scanner = new Scanner(System.in);
         while (running) {
             synchronized (System.out) {
-                    System.out.println("Enter a command: ");
+                System.out.println("Enter a command: ");
             }
             String command = scanner.nextLine();
             this.assertCommand(command);
         }
         System.out.print("Robot controller s-a oprit pentru ca ");
-        if(this.numberOfStoppedRobots ==this.listOfSlaves.size())
+        if (this.numberOfStoppedRobots == this.listOfSlaves.size())
             System.out.println(" s-au oprit toti robotii");
         else System.out.println(" s-a terminat de vizitat matricea");
-        for(Robot robot : listOfSlaves)
+        for (Robot robot : listOfSlaves) {
             System.out.println("robotul " + robot.getName() + " a plasat " + robot.getNumberOfTokensPlaced() + " tokeni");
+            robot.stopExecution();
+        }
+
     }
 
     private void assertCommand(String command) {
@@ -59,7 +64,7 @@ public class RobotController {
                 if (this.findRobot(targetedRobot) != null) {
                     Objects.requireNonNull(this.findRobot(targetedRobot)).stopExecution();
                     this.numberOfStoppedRobots++;
-                    if(numberOfStoppedRobots == this.listOfSlaves.size())
+                    if (numberOfStoppedRobots == this.listOfSlaves.size())
                         this.running = false;
                 }
             }

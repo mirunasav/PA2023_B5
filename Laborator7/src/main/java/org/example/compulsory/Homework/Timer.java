@@ -27,11 +27,14 @@ public class Timer extends Thread {
             }
 
             System.out.println("Elapsed time: " + totalElapsedSeconds + " seconds");
-
+            if (Exploration.threadCounter == 0) {
+                Thread.currentThread().interrupt();
+            }
             try {
                 Thread.sleep(1000); // wait for 1 second
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            } catch (InterruptedException ignored) {
+                System.out.println("au trecut " + totalElapsedSeconds + " secunde in total");
+                running = false;
             }
         }
     }
@@ -50,7 +53,7 @@ public class Timer extends Thread {
         // ...
         System.out.println("Time is up!");
         this.running = false;
-        for(Robot robot : Exploration.listOfSlaves)
+        for (Robot robot : Exploration.listOfSlaves)
             robot.stopExecution();
         Thread.currentThread().interrupt();
     }
