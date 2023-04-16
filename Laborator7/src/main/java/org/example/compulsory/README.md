@@ -85,3 +85,6 @@ s-a terminat de explorat graful
 ```
 Cum graful e conex, mereu se termina de explorat. Din nou, robotii au voie sa treaca printr-un nod deja vizitat 
 doar ca pur si simplu nu il mai marcheaza ca vizitat.
+
+
+https://www2.mathematik.tu-darmstadt.de/~disser/pdfs/DereniowskiDisserKosowskiPajakUznanski13.pdf
