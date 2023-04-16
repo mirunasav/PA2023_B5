@@ -1,4 +1,4 @@
-package org.example.compulsory.Homework;
+package org.example.compulsory.homework;
 
 public class Compulsory {
 

@@ -1,4 +1,4 @@
-package org.example.compulsory.Homework;
+package org.example.compulsory.homework;
 
 import java.util.ArrayList;
 import java.util.Collections;

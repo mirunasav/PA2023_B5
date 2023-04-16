@@ -1,14 +1,8 @@
-package org.example.compulsory.Homework;
-
-import org.example.compulsory.Exploration;
+package org.example.compulsory.homework;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static java.lang.System.exit;
 
 public class RobotController {
     List<Robot> listOfSlaves;

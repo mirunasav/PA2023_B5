@@ -1,11 +1,8 @@
-package org.example.compulsory.Homework;
+package org.example.compulsory.homework;
 
 import javafx.util.Pair;
 
 import java.util.*;
-
-import static java.lang.System.exit;
-import static java.lang.System.in;
 
 public class Robot implements Runnable {
     private String name;
