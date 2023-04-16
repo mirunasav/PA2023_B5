@@ -53,3 +53,35 @@ si atunci opreste toti robotii
 - ori se opreste cand s-a terminat de vizitat matricea si in consecinta se opreste programul; inainte sa se opreasca,
 afiseaza timpul total;
 - In robot controller, inainte sa se opreasca,
+
+BONUS
+- am creat un graf : mai intai am inceput sa creez un graf random si am fct toate functiile necesare,
+apoi mi am dat seama ca nu s-ar crea un graf conex asa ca am creat un graf conex random cu ajutorul jgrapht.
+- cam ca la matrice, am un explorationGraph (in loc de explorationmap) care e implementat ca un Singleton
+- Robotii viziteaza graful intr-o maniera dfs, pana se termina tot graful de vizitat
+- am creat un vertexFactory ca sa pot crea un graf random conex
+- clasa vertex contine un id unic fiecarui nod precum si functii de vizitare
+- dat fiind ca graful este shared intre roboti, acestia au acces pe rand la nodurile sale
+- exemplu de output:
+```agsl
+([1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 ], [{1 ,6 }, {10 ,6 }, {9 ,7 }, {8 ,9 }, {5 ,9 }, {1 ,5 }, {10 ,1 }, {2 ,1 }, {3 ,1 }, {5 ,6 }, {10 ,7 }, {8 ,2 }, {9 ,1 }, {7 ,6 }, {5 ,4 }, {4 ,7 }, {3 ,6 }])
+([1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 ], [{1 ,6 }, {10 ,6 }, {9 ,7 }, {8 ,9 }, {5 ,9 }, {1 ,5 }, {10 ,1 }, {2 ,1 }, {3 ,1 }, {5 ,6 }, {10 ,7 }, {8 ,2 }, {9 ,1 }, {7 ,6 }, {5 ,4 }, {4 ,7 }, {3 ,6 }])
+threadul pt robotul Robot0 a inceput
+threadul pt robotul Robot1 a inceput
+Robotul  Robot0 a explorat nodul 4
+Robotul  Robot1 a explorat nodul 9
+Robotul  Robot1 a explorat nodul 7
+Robotul  Robot0 a explorat nodul 5
+Robotul  Robot1 a explorat nodul 10
+Robotul  Robot0 a explorat nodul 1
+Robotul  Robot1 a explorat nodul 6
+Robotul  Robot0 a explorat nodul 3
+Robotul  Robot1 a explorat nodul 8
+Robotul  Robot0 a explorat nodul 2
+Robotul Robot1 s- a oprit
+Robotul Robot0 s- a oprit
+s-a terminat de explorat graful
+s-a terminat de explorat graful
+```
+Cum graful e conex, mereu se termina de explorat. Din nou, robotii au voie sa treaca printr-un nod deja vizitat 
+doar ca pur si simplu nu il mai marcheaza ca vizitat.
