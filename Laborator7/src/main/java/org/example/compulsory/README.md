@@ -64,7 +64,7 @@ apoi mi am dat seama ca nu s-ar crea un graf conex asa ca am creat un graf conex
 - dat fiind ca graful este shared intre roboti, acestia au acces pe rand la nodurile sale
 - exemplu de output:
 ```agsl
-([1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 ], [{1 ,6 }, {10 ,6 }, {9 ,7 }, {8 ,9 }, {5 ,9 }, {1 ,5 }, {10 ,1 }, {2 ,1 }, {3 ,1 }, {5 ,6 }, {10 ,7 }, {8 ,2 }, {9 ,1 }, {7 ,6 }, {5 ,4 }, {4 ,7 }, {3 ,6 }])
+
 ([1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 ], [{1 ,6 }, {10 ,6 }, {9 ,7 }, {8 ,9 }, {5 ,9 }, {1 ,5 }, {10 ,1 }, {2 ,1 }, {3 ,1 }, {5 ,6 }, {10 ,7 }, {8 ,2 }, {9 ,1 }, {7 ,6 }, {5 ,4 }, {4 ,7 }, {3 ,6 }])
 threadul pt robotul Robot0 a inceput
 threadul pt robotul Robot1 a inceput
