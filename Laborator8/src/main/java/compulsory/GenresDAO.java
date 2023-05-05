@@ -1,3 +1,5 @@
+package compulsory;
+
 import java.sql.*;
 
 public class GenresDAO {

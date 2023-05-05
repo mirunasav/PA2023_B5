@@ -1,3 +1,5 @@
+import compulsory.*;
+
 import java.sql.SQLException;
 
 public class Main {
@@ -6,6 +8,7 @@ public class Main {
             var artists = new ArtistDAO();
 //            artists.create("Pink Floyd");
 //            artists.create("Michael Jackson");
+
             var genres = new GenresDAO();
 //            genres.create("Rock");
 //            genres.create("Indie");

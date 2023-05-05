@@ -1,10 +1,13 @@
+package compulsory;
+
 import java.sql.*;
 
 public class AlbumsDAO {
     public void create(Integer releaseYear, String title, Integer artistID) throws SQLException {
         Connection con = Database.getConnection();
-        try (PreparedStatement pstmt = con.prepareStatement(
-                "insert into albums(release_year, title, artist) values(?,?,?)")) {
+        String QUERY = "insert into albums(release_year, title, artist) values(?,?,?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, releaseYear);
             pstmt.setString(2, title);
             pstmt.setInt(3, artistID);
