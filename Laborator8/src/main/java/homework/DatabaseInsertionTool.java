@@ -108,7 +108,7 @@ public class DatabaseInsertionTool {
                 //caut albumul
                 Statement searchAlbum = connection.createStatement();
                 ResultSet rsAlbum = searchAlbum.executeQuery("select * from albums where title='" + albumTitle + "'");
-                int albumId = rs.next() ? rs.getInt(1) : 0;
+                int albumId = rsAlbum.next() ? rsAlbum.getInt(1) : 0;
 
                 if (albumId == 0){
                     continue;
