@@ -6,9 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseInsertionTool {
     static String csvFilePath = "C:\\Users\\Miruna Savin\\IdeaProjects\\PA2023_B5\\Laborator8\\src\\main\\java\\homework\\albumlist.csv";
@@ -38,17 +36,17 @@ public class DatabaseInsertionTool {
                 String albumTitle = data[2];
                 String artistName = data[3];
                 //caut artistul
-                var artist = artistDAO.findByName(artistName);
-                //daca nu gasesc artistul
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery("select * from artists where name='" + artistName + "'");
+                int id = rs.next() ? rs.getInt(1) : 0;
+                if (id == 0){
+                   continue;
+                }
                 //altfel:
-                if(artist==null)
-                    continue;
-
-                int artistID = artist.getArtistID();
 
                 albumStatement.setInt(1,releaseYear);
                 albumStatement.setString(2,albumTitle);
-                albumStatement.setInt(3,artistID);
+                albumStatement.setInt(3,id);
 
                 albumStatement.addBatch();
                 count++;
