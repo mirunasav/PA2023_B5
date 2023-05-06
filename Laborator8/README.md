@@ -6,3 +6,4 @@ HOMEWORK:
 lui si il adaugam in baza de date cu albume; However cred ca atingea limita superioara de conexiuni la DB or sth pt ca dupa 7 inserari se oprea
 - pot gasi workaround si sa modific tabelele si in loc de artist id sa retin artist name la albume, pt ca numele e unic oricum, si sa inserez ca atare.
 - UPDATE: am gasit workaround si functioneaza, am dat update la albume;
+- problem : cand fac un query de tip select * from albums, imi apar anumite rezultate, dar cand dau view la tabele in intellij, nu isi dau update deloc, indiferent ce operatii fac pe ele; also merge f usor sa adaug albume dar nu pot sa adaug album-genre associations desi codul e la fel;
