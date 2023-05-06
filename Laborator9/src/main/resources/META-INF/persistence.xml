@@ -3,13 +3,15 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-  <persistence-unit name="default">
+  <persistence-unit name="default"  transaction-type="RESOURCE_LOCAL" >
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>Entities.AlbumsEntity</class>
     <class>Entities.ArtistsEntity</class>
+    <class>Entities.AlbumsEntity</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
-      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.driver"
+                value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.url"
+                value="jdbc:postgresql://localhost:5432/postgres"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>
       <property name="javax.persistence.jdbc.password"
                 value="parola"/>
