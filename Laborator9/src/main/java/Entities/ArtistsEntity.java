@@ -1,6 +1,8 @@
 package Entities;
 
-import javax.persistence.*;
+
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -33,6 +35,7 @@ public class ArtistsEntity {
     public ArtistsEntity(String name){
         this.name = name;
     }
+    public ArtistsEntity(){}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
