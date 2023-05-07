@@ -33,7 +33,7 @@ public class PersistenceManager {
         if(entityManagerFactory!=null){
             entityManagerFactory.close();
             entityManagerFactory = null;
-            System.out.println("closed entity manager factory");
+           // System.out.println("closed entity manager factory");
         }
     }
 }

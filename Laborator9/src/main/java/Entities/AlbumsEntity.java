@@ -1,12 +1,13 @@
 package Entities;
 
+import Repositories.ArtistRepository;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @NamedQueries({
         @NamedQuery(name = "AlbumsEntity.findByName",
-        query = "Select a from AlbumsEntity a where a.title = :name"),
+        query = "Select a from AlbumsEntity a where a.name = :name"),
 })
 @Entity
 @Table(name = "albums", schema = "public", catalog = "postgres")
@@ -20,10 +21,11 @@ public class AlbumsEntity {
     private Integer releaseYear;
     @Basic
     @Column(name = "title")
-    private String title;
-    @Basic
-    @Column(name = "artist")
-    private Integer artist;
+    private String name;
+
+    @OneToOne(targetEntity = ArtistsEntity.class)
+    @JoinColumn(name = "artist", referencedColumnName = "id")
+    private ArtistsEntity artist;
 
     public int getId() {
         return id;
@@ -41,20 +43,26 @@ public class AlbumsEntity {
         this.releaseYear = releaseYear;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String title) {
+        this.name = title;
     }
 
     public Integer getArtist() {
-        return artist;
+        return this.artist.getId();
     }
 
-    public void setArtist(Integer artist) {
-        this.artist = artist;
+    public void setArtist(Integer artistID) {
+        ArtistRepository  artistRepository = new ArtistRepository();
+        try{
+            this.artist = (ArtistsEntity) artistRepository.findById(artistID);
+        }
+        catch (Exception e){
+            System.out.println("artist with this id does not exist");
+        }
     }
 
     @Override
@@ -62,11 +70,11 @@ public class AlbumsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AlbumsEntity that = (AlbumsEntity) o;
-        return id == that.id && Objects.equals(releaseYear, that.releaseYear) && Objects.equals(title, that.title) && Objects.equals(artist, that.artist);
+        return id == that.id && Objects.equals(releaseYear, that.releaseYear) && Objects.equals(name, that.name) && Objects.equals(artist, that.artist);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, releaseYear, title, artist);
+        return Objects.hash(id, releaseYear, name, artist);
     }
 }

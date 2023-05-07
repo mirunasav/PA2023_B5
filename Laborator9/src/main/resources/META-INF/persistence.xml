@@ -7,6 +7,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>Entities.ArtistsEntity</class>
         <class>Entities.AlbumsEntity</class>
+        <class>Entities.GenresEntity</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver"
                       value="org.postgresql.Driver"/>
@@ -15,6 +16,7 @@
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password"
                       value="parola"/>
+
         </properties>
     </persistence-unit>
     <persistence-unit name="persistenceUnit"/>

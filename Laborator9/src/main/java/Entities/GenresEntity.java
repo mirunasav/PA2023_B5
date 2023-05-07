@@ -1,16 +1,15 @@
 package Entities;
 
-
 import jakarta.persistence.*;
 
 import java.util.Objects;
 @NamedQueries({
-        @NamedQuery(name = "ArtistsEntity.findByName",
-                query = "Select a from ArtistsEntity a where a.name = :name"),
+        @NamedQuery(name = "GenresEntity.findByName",
+                query = "Select a from GenresEntity a where a.name = :name"),
 })
 @Entity
-@Table(name = "artists", schema = "public", catalog = "postgres")
-public class ArtistsEntity  {
+@Table(name = "genres", schema = "public", catalog = "postgres")
+public class GenresEntity  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -35,15 +34,11 @@ public class ArtistsEntity  {
         this.name = name;
     }
 
-    public ArtistsEntity(String name){
-        this.name = name;
-    }
-    public ArtistsEntity(){}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ArtistsEntity that = (ArtistsEntity) o;
+        GenresEntity that = (GenresEntity) o;
         return id == that.id && Objects.equals(name, that.name);
     }
 
