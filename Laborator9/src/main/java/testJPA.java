@@ -1,8 +1,9 @@
 import Entities.ArtistsEntity;
+import Repositories.AlbumRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class testJPA {
     public static void test(){
@@ -11,16 +12,35 @@ public class testJPA {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        ArtistsEntity artist = new ArtistsEntity("Nirvana");
-        em.persist(artist);
 
         ArtistsEntity a = (ArtistsEntity) em.createQuery("select e from ArtistsEntity e where e.name = 'Nirvana'").getSingleResult();
         a.setName("Nirvana");
         em.getTransaction().commit();
+        System.out.println(a.getName());
         em.close();
         emf.close();
     }
+    public static void testAlbumCreate(){
+        AlbumRepository albumRepository = new AlbumRepository();
+        albumRepository.createAlbum(2002,"Ceva titlu", 1);
+    }
+    public static void testAlbumFindByID(int ID) throws Exception {
+        AlbumRepository albumRepository = new AlbumRepository();
+        albumRepository.findById(ID);
+    }
+    public static void testAlbumFindByName() throws Exception {
+        AlbumRepository albumRepository = new AlbumRepository();
+        albumRepository.findByTitle("Faith");
+    }
     public static void main(String[] args) {
-        test();
+
+        try{
+            testAlbumFindByID(1);
+            testAlbumFindByName();
+            testAlbumFindByID(1000);
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 }

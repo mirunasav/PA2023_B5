@@ -1,12 +1,14 @@
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+package Repositories;
+
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 /**
  * the singleton responsible for managing the entitymanagerfactory
  */
 public class PersistenceManager {
-    private static PersistenceManager instance = null ;
-    protected EntityManagerFactory entityManagerFactory;
+    public static PersistenceManager instance = null ;
+    protected static EntityManagerFactory entityManagerFactory;
 
     public static PersistenceManager getInstance(){
         if(instance==null)
@@ -17,14 +19,14 @@ public class PersistenceManager {
     private PersistenceManager(){
     }
 
-    public EntityManagerFactory getEntityManagerFactory(){
+    public  EntityManagerFactory getEntityManagerFactory(){
         if(entityManagerFactory == null)
             createEntityManagerFactory();
         return entityManagerFactory;
     }
 
-    protected void createEntityManagerFactory(){
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("Laborator9PU");
+    protected  void createEntityManagerFactory(){
+        entityManagerFactory = Persistence.createEntityManagerFactory("default");
     }
 
     public void closeEntityManagerFactory(){

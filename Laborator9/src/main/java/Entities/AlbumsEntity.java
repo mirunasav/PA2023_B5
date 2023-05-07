@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@NamedQueries({
+        @NamedQuery(name = "AlbumsEntity.findByName",
+        query = "Select a from AlbumsEntity a where a.title = :name"),
+})
 @Entity
 @Table(name = "albums", schema = "public", catalog = "postgres")
 public class AlbumsEntity {
