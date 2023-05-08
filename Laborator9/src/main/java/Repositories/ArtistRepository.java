@@ -8,24 +8,21 @@ import java.util.List;
 public class ArtistRepository extends AbstractRepository<ArtistsEntity>{
 
     public void createArtist(String name){
-        em = PersistenceManager.getInstance().getEntityManagerFactory().createEntityManager();
+        AbstractRepository.createEntityManager();
         em.getTransaction().begin();
-
         ArtistsEntity artist = new ArtistsEntity();
         artist.setName(name);
 
         em.persist( artist );
         em.getTransaction( ).commit();
-        em.close();
-        PersistenceManager.getInstance().closeEntityManagerFactory();
     }
     @Override
     protected ArtistsEntity findByIdImplementation(int ID) throws Exception {
         ArtistsEntity artistsEntity = em.find(ArtistsEntity.class,ID);
         if(artistsEntity == null)
             throw new Exception("Artist with this id does not exist");
-        System.out.println("id: " + artistsEntity.getId() );
-        System.out.println("name: " + artistsEntity.getName() );
+        //System.out.println("id: " + artistsEntity.getId() );
+        //System.out.println("name: " + artistsEntity.getName() );
         return artistsEntity;
     }
 

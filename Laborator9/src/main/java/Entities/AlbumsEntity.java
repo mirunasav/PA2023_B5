@@ -1,5 +1,6 @@
 package Entities;
 
+import Repositories.AbstractRepository;
 import Repositories.ArtistRepository;
 import jakarta.persistence.*;
 
@@ -61,6 +62,7 @@ public class AlbumsEntity {
             this.artist = artistRepository.findById(artistID);
         }
         catch (Exception e){
+            AbstractRepository.closeEntityManager();
             throw new IllegalArgumentException("Artist with this id does not exist");
         }
     }

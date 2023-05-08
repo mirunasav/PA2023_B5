@@ -73,6 +73,19 @@ public class testJPA {
         long timeInNanoseconds = end - begin;
         double timeInSeconds = (double) timeInNanoseconds / 1_000_000_000.0;
 
+        System.out.println("Album insertion time for " + numberOfAlbums + " albums");
+        System.out.println("time in nanoseconds : " + timeInNanoseconds);
+        System.out.println("time in seconds : " + timeInSeconds);
+    }
+    private static void testDatabaseArtistInsertionTime(int numberOfArtists) {
+        long begin = System.nanoTime();
+        DatabaseInsertionTool.insertArtists(numberOfArtists);
+        long end = System.nanoTime();
+
+        long timeInNanoseconds = end - begin;
+        double timeInSeconds = (double) timeInNanoseconds / 1_000_000_000.0;
+
+        System.out.println("Artist insertion time for " + numberOfArtists + " artists");
         System.out.println("time in nanoseconds : " + timeInNanoseconds);
         System.out.println("time in seconds : " + timeInSeconds);
     }
@@ -90,7 +103,8 @@ public class testJPA {
           //  testDatabaseArtistInsertion(2);
             //testDatabaseAlbumInsertion(2);
 
-            testDatabaseAlbumInsertionTime(20);
+            testDatabaseAlbumInsertionTime(100);
+            testDatabaseArtistInsertionTime(10);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -99,4 +113,6 @@ public class testJPA {
             AbstractRepository.closeEntityManager();
         }
     }
+
+
 }

@@ -24,13 +24,16 @@ public abstract class AbstractRepository<T> {
     protected abstract List<T> findByNameImplementation(String name) throws Exception;
 
     protected static void createEntityManager() {
-        if(em== null)
+        if(em== null || !em.isOpen())
             em = PersistenceManager.getInstance().getEntityManagerFactory().createEntityManager();
     }
 
     public static void closeEntityManager() {
-        em.close();
-        PersistenceManager.getInstance().closeEntityManagerFactory();
+        if(em!=null){
+            em.close();
+            PersistenceManager.getInstance().closeEntityManagerFactory();
+        }
+
     }
 
 }

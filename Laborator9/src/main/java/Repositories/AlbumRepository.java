@@ -12,20 +12,26 @@ public class AlbumRepository extends AbstractRepository<AlbumsEntity> {
     }
 
     public void createAlbum(int releaseYear, String title, int artistID) throws IllegalArgumentException {
-        AbstractRepository.createEntityManager();
         while (true) {
-            if (!em.getTransaction().isActive()) {
+            if (!em.isOpen()||!em.getTransaction().isActive()) {
+                AbstractRepository.createEntityManager();
 
                 em.getTransaction().begin();
 
                 AlbumsEntity album = new AlbumsEntity();
-                album.setArtist(artistID);
-                album.setName(title);
-                album.setReleaseYear(releaseYear);
+                try{
+                    album.setArtist(artistID);
+                    album.setName(title);
+                    album.setReleaseYear(releaseYear);
 
-                em.persist(album);
-                em.getTransaction().commit();
-                break;
+                    em.persist(album);
+                    em.getTransaction().commit();
+                    break;
+                }
+                catch (IllegalArgumentException e){
+                    throw e;
+                }
+
             } else {
                 System.out.println("something");
             }
