@@ -11,3 +11,4 @@ Homework:
 
 - update: am rezolvat problema
 - problema noua : pot insera vreo 4 chestii intr-un tabel dar dupa aia imi spune ca "transaction still active" desi i am dat commit deci nu inteleg care e problema
+- update : solved
