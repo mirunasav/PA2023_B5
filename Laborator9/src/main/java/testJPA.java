@@ -25,7 +25,8 @@ public class testJPA {
         emf.close();
     }
     public static void testAlbumCreate(){
-        AbstractRepository.createAlbum(2002, "titlu", 12);
+        AlbumRepository albumRepository = new AlbumRepository();
+        albumRepository.createAlbum(2002, "titlu", 12);
     }
     public static void testAlbumFindByID(int ID) throws Exception {
         AlbumRepository albumRepository = new AlbumRepository();
@@ -56,26 +57,46 @@ public class testJPA {
     public static void testDatabaseArtistInsertion(int numberOfArtists){
         DatabaseInsertionTool.insertArtists(numberOfArtists);
     }
-    public static void testAddArtist(){
+    public static void testAddArtist(String name){
         ArtistRepository artistRepository = new ArtistRepository();
-        artistRepository.createArtist("Eu");
+        artistRepository.createArtist(name);
+    }
+    public static void testDatabaseAlbumInsertion (int numberOfAlbums){
+        DatabaseInsertionTool.insertAlbums(numberOfAlbums);
+    }
+
+    public static void testDatabaseAlbumInsertionTime(int numberOfAlbums){
+        long begin = System.nanoTime();
+        DatabaseInsertionTool.insertAlbums(numberOfAlbums);
+        long end = System.nanoTime();
+
+        long timeInNanoseconds = end - begin;
+        double timeInSeconds = (double) timeInNanoseconds / 1_000_000_000.0;
+
+        System.out.println("time in nanoseconds : " + timeInNanoseconds);
+        System.out.println("time in seconds : " + timeInSeconds);
     }
     public static void main(String[] args) {
 
         try{
-        //    testAlbumCreate();
-            testAlbumFindByID(1);
-            testAlbumFindByName("Faith");
-            //testAlbumFindByID(1000); -> exemplu care arunca exceptie
+          // testAlbumCreate();
+           testAlbumFindByID(1);
+           testAlbumFindByName("Faith");
+           //testAlbumFindByID(1000); -> exemplu care arunca exceptie
             testArtistFindByID(1);
             testArtistFindByName("Nirvana");
             testGenreFindByID(1);
             testGenreFindByName("Rock");
+          //  testDatabaseArtistInsertion(2);
+            //testDatabaseAlbumInsertion(2);
 
-            //testDatabaseArtistInsertion(1);
+            testDatabaseAlbumInsertionTime(20);
         }
         catch (Exception e){
-            System.out.println(e.toString());
+            e.printStackTrace();
+        }
+        finally{
+            AbstractRepository.closeEntityManager();
         }
     }
 }

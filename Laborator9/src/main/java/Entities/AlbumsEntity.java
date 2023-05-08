@@ -55,13 +55,13 @@ public class AlbumsEntity {
         return this.artist.getId();
     }
 
-    public void setArtist(Integer artistID) {
+    public void setArtist(Integer artistID) throws IllegalArgumentException{
         ArtistRepository  artistRepository = new ArtistRepository();
         try{
-            this.artist = (ArtistsEntity) artistRepository.findById(artistID);
+            this.artist = artistRepository.findById(artistID);
         }
         catch (Exception e){
-            System.out.println("artist with this id does not exist");
+            throw new IllegalArgumentException("Artist with this id does not exist");
         }
     }
 
