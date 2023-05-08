@@ -8,3 +8,6 @@ Homework:
 - am creat Repositories pt Albums Genres si Artists si l am modificat pe cel deja existent pentru a extinde clasa abstractrepository
 - am creat relatie one to one unidirectionala de la albums la artists pt ca desi un artist poate avea mai multe albume, tabelele din lab 8 sunt de asa natura incat doar in albume sa retin id-ul artistului, nu si invers; nu am vrut sa modific baza de date si toate intrarile din ea doar pt asta
 - am creat un tool ca sa generez random nume de artisti si albume si sa le insereze in DB; however imi da o eroare ciudata, imi zice ca nu pot opera pe un closed Entity Manager (desi nu e closed, se inchide f random); am crezut ca problema e pt ca incerc sa deschid aceasta variabila statica a clasei AbstractRepository din alta clasa asa incat am incercat sa fac metoda createAlbum si in abstractRepository, fix ca la celelalte metode, si tot nu a mers
+
+- update: am rezolvat problema
+- problema noua : pot insera vreo 4 chestii intr-un tabel dar dupa aia imi spune ca "transaction still active" desi i am dat commit deci nu inteleg care e problema
