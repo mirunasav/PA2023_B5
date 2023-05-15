@@ -1,10 +1,9 @@
 public enum Commands {
-    EXIT("exit");
-
-    public final String label;
-
-    private Commands(String label){
-        this.label = label;
-    }
+    EXIT,
+    STOP,
+    NEW_GAME,
+    GET_GAME_ID,
+    JOIN_GAME,
+    SUBMIT_MOVE
 
 }
