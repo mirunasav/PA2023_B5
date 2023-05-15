@@ -13,6 +13,8 @@ public class ClientThread implements Runnable {
     boolean isRunning = true;
     private int gameID;
     private int id;
+
+    private int numberOfMovesInGame = 0;
     public boolean isInGame = false;
     public boolean hasGameStarted = false;
 
@@ -52,7 +54,7 @@ public class ClientThread implements Runnable {
     }
 
     public String readClientRequest() throws IOException {
-        String request = reader.readLine();
+        var request = reader.readLine();
         System.out.println("Client " + this.getId() + " has requested " + request);
         return request;
     }
@@ -72,8 +74,13 @@ public class ClientThread implements Runnable {
         return true;
     }
 
+    public void executeMove()throws IOException{
+        commandProcessor.setCommand("SUBMIT_MOVE");
+        commandProcessor.executeCommand();
+    }
     public void announceThatTheGameHasStarted() throws IOException {
         sendClientResponse("GAME_STARTED");
+        this.hasGameStarted = true;
     }
 
     //sends the number of rows to be sent and then the actual rows to the client
@@ -94,12 +101,40 @@ public class ClientThread implements Runnable {
                 sendClientResponse("YOUR_TURN");
                 return true;
             }
-            sendClientResponse("OPPONENT'S_TURN");
+            sendClientResponse("NOT_YOUR_TURN");
             return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void runInGame() throws IOException {
+        //trimit mesaj: se mai joaca sau nu?
+        if (GameServer.getInstance().getGame(gameID).hasEnded) {
+            sendClientResponse("GAME_ENDED");//trimit si castigatorul
+            return;
+        } else
+            sendClientResponse("GAME_ONGOING");
+        sendGameState();
+        if (writeWhoHasToMove()) {
+            //this client's turn to move
+            executeMove();
+            sendClientResponse("NEXT_MOVE");
+        } else {
+            //wait for update from server; get move sau cv de genul? sau cum ar tb ca client  thread -> server si tot asa cumva
+            while (true) {
+                if (GameServer.getInstance().getGame(gameID).numberOfMoves != numberOfMovesInGame) {
+                    numberOfMovesInGame++;
+                   if( GameServer.getInstance().getGame(gameID).hasEnded)
+                       sendClientResponse("GAME_ENDED");
+                   else
+                       sendClientResponse("NEXT_MOVE");
+                    break;
+                }
+            }
+        }
+
     }
 
     public void run() {
@@ -111,20 +146,23 @@ public class ClientThread implements Runnable {
             // get request from the input stream
             while (isRunning) {
                 if (isInGame && GameServer.getInstance().getGame(gameID).hasStarted) {
-                    sendGameState();
-                    //write which player's turn it is
-                    if (writeWhoHasToMove())//this client's turn to move
-                    {
+                    runInGame();
+                }
+                //daca nu sunt in game, execut request de la client
+                //daca sunt in game dar jocul nu a inceput, nu fac nimic
+                else {
+                    if (!isInGame) {
                         executeRequest(readClientRequest());
+                        continue;
+                    }
+                    while (true) {
+                        //astept sa inceapa jocul
+                        if (isInGame && GameServer.getInstance().getGame(gameID).hasStarted)
+                            break;
                     }
 
-                    continue;
-                    //execute client request: if it is the client's turn to move, execute it
                 }
-                if(isInGame){
-                    continue;
-                }
-                executeRequest(readClientRequest());
+
             }
 
         } catch (IOException e) {

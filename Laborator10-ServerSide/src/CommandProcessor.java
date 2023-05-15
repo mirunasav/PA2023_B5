@@ -18,6 +18,7 @@ public class CommandProcessor {
             case STOP -> this.command = new StopCommand();
             case NEW_GAME -> this.command = new NewGameCommand();
             case JOIN_GAME -> this.command = new JoinGameCommand();
+            case SUBMIT_MOVE -> this.command = new SubmitMoveCommand();
         }
     }
 

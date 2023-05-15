@@ -12,7 +12,7 @@ public class JoinGameCommand extends Command {
             clientThread.isInGame = true;
 
             GameServer.getInstance().joinGame(clientThread.getId(), gameID);
-            clientThread.sendClientResponse("GAME_ID_OK");
+           // clientThread.sendClientResponse("GAME_ID_OK");
             return;
         }
         clientThread.sendClientResponse("INVALID_GAME_ID");

@@ -23,8 +23,11 @@ public class Game {
     int firstPlayerID;
     int secondPlayerID;
     int playerWhoMoves;
+    public int numberOfMoves = 0;
 
     public boolean hasStarted = false;
+    public boolean hasEnded = false;
+
     /*private enum GameState{
         WHITE_WON{
             @Override
@@ -70,6 +73,51 @@ public class Game {
         });
     }
 
+    private boolean isGameFinished() {
+        //verific daca exista 3 nr consecutive la fel pe orizontala/verticala/diagonala
+        return hasFirstPlayerWon() || hasSecondPlayerWon();
+    }
+
+    private boolean hasFirstPlayerWon() {
+        int number = 0;
+        for (int i = 0; i < numberOfColumns; i++)
+            for (int j = 0; j < numberOfColumns; j++) {
+                if (gameBoard[i][j] == 1)
+                    number++;
+                if (number == 3)
+                    return true;
+            }
+        number = 0;
+        for (int j = 0; j < numberOfColumns; j++)
+            for (int i = 0; i < numberOfColumns; i++) {
+                if(gameBoard[i][j]== 1)
+                    number++;
+                if (number == 3)
+                    return true;
+            }
+        return false;
+    }
+
+    private boolean hasSecondPlayerWon() {
+        int number = 0;
+        for (int i = 0; i < numberOfColumns; i++)
+            for (int j = 0; j < numberOfColumns; j++) {
+                if (gameBoard[i][j] == 2)
+                    number++;
+                if (number == 3)
+                    return true;
+            }
+        number = 0;
+        for (int j = 0; j < numberOfColumns; j++)
+            for (int i = 0; i < numberOfColumns; i++) {
+                if(gameBoard[i][j]== 2)
+                    number++;
+                if (number == 3)
+                    return true;
+            }
+        return false;
+    }
+
     public int[][] getGameBoard() {
         return gameBoard;
     }
@@ -85,12 +133,15 @@ public class Game {
         //dau switch la jucatorul al carei ture este
         playerWhoMoves = playerWhoMoves == firstPlayerID ? secondPlayerID : firstPlayerID;
         updateGame();
+        if(isGameFinished())
+            hasEnded = true;
+        numberOfMoves++;
     }
 
     public void addPlayer(int secondPlayerID) {
         this.secondPlayerID = secondPlayerID;
         this.numberOfPlayers++;
-        this.startGame();
+
     }
 
     //overwrites the content of the file
@@ -105,7 +156,7 @@ public class Game {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        ;
+
                     });
                     try {
                         fileWriter.write("\n");
@@ -142,15 +193,15 @@ public class Game {
     public void startGame() {
         Random rand = new Random();
         int firstPlayer = rand.nextInt(2) + 1;
-        if(firstPlayer == 2){
+        if (firstPlayer == 2) {
             var temp = firstPlayerID;
             firstPlayerID = secondPlayerID;
             secondPlayerID = temp;
-            playerWhoMoves = secondPlayerID;
+            playerWhoMoves = firstPlayer;
             hasStarted = true;
             return;
         }
         playerWhoMoves = firstPlayerID;
-        hasStarted  = true;
+        hasStarted = true;
     }
 }

@@ -42,6 +42,7 @@ public class GameServer {
         this.gameMap.put(clientThreadID, targetGame.get(0));
         targetGame.get(0).addPlayer(clientThreadID);
         startGame(gameID);
+        targetGame.get(0).startGame();
     }
 
     public Game getGame(int gameID) {
@@ -79,6 +80,7 @@ public class GameServer {
                 .stream()
                 .filter(entry -> entry.getValue().gameID == gameID)
                 .map(Map.Entry :: getKey).toList();
+
         for(int i = 0; i < clientThreads.size(); i++){
             //transmit fiecarui client thread ca am inceput jocul
             for (ClientThread clientThread : clientThreadList)
